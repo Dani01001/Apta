@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<h2>Perfil de {{ user.nombre }}</h2>
+
+{% if user.foto_perfil %}
+    <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" width="120">
+{% else %}
+    <div class="avatar" style="background-color:#{{ user.avatar_color }}">
+        {{ user.nombre|first|upper }}
+    </div>
+{% endif %}
+
+<ul>
+    <li><b>Correo:</b> {{ user.email }}</li>
+    <li><b>Teléfono:</b> {{ user.telefono }}</li>
+</ul>
+
+<a href="{% url 'usuarios:profile_edit' %}">Editar perfil</a>
+{% endblock %}

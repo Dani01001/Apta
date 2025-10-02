@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os # creado por dani al configurar usuarios
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,45 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', # creado por dani al configurar usuarios
+    'allauth', # creado por dani al configurar usuarios
+    'allauth.account', # creado por dani al configurar usuarios
+    'allauth.socialaccount', # creado por dani al configurar usuarios
+    'allauth.socialaccount.providers.google', # creado por dani al configurar usuarios
+    'Reservas',
+    'Restaurantes',
+    'Usuarios',
 ]
+
+# AUTH_USER_MODEL
+AUTH_USER_MODEL = 'Usuarios.CustomUser'
+
+
+# Allauth y autenticación                               # inicio "creado por dani al configurar usuarios"
+AUTHENTICATION_BACKENDS = [
+'django.contrib.auth.backends.ModelBackend',
+'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1 
+
+LOGIN_REDIRECT_URL = 'usuarios:profile'
+LOGOUT_REDIRECT_URL = 'usuarios:login'
+
+# Allauth
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+SOCIALACCOUNT_QUERY_EMAIL = True
+
+
+
+# MEDIA (para fotos de perfil)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+                                                        #Fin
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -45,6 +84,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware', #creado por dani para la configuracion de Usuarios
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -54,7 +94,7 @@ ROOT_URLCONF = 'ReservaYa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
