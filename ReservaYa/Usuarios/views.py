@@ -4,6 +4,9 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
+from .decorators import restaurant_admin_required
+
 
 Usuario = get_user_model()
 
@@ -13,7 +16,9 @@ def signup_view(request):
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            user = authenticate(request, username=user.username, password=form.cleaned_data["password1"])
+            if user is not None:
+                login(request, user)
             messages.success(request, "¡Registro exitoso! Bienvenido a ReservaYa.")
             return redirect("usuarios:profile")
     else:
@@ -26,7 +31,6 @@ def login_view(request):
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user)
             messages.success(request, "Bienvenido de nuevo, comandante.")
             return redirect("usuarios:profile")
     else:
@@ -60,3 +64,14 @@ def profile_edit_view(request):
 
 def home_view(request):
     return render(request, "home.html")
+
+@login_required
+def dashboard(request):
+    if request.user.is_restaurant_admin():
+        return render(request, "usuarios/dashboard_restaurante.html")
+    else:
+        return render(request, "usuarios/dashboard_usuario.html")
+    
+@restaurant_admin_required
+def panel_restaurante(request):
+    return render(request, "usuarios/dashboard_restaurante.html")

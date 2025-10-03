@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Restaurante</title>
+    <link rel="stylesheet" href="{% static 'CSS/estilos.css' %}">
+</head>
+<body>
+    <h1>Bienvenido {{ user.username }}</h1>
+    <p>Este es tu panel de administrador de restaurante.</p>
+
+    <ul>
+        <li><a href="{% url 'restaurantes:lista' %}">Gestionar restaurantes</a></li>
+        <li><a href="{% url 'reservas:lista' %}">Ver reservas recibidas</a></li>
+        <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+    </ul>
+</body>
+</html>

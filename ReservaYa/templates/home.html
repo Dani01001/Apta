@@ -3,6 +3,21 @@
 {% block title %}Inicio - ReservaYa{% endblock %}
 
 {% block content %}
-<h1>Bienvenido a ReservaYa</h1>
-<p>Use el menú para registrarse o iniciar sesión.</p>
+    <h1>Bienvenido a ReservaYa</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hola, {{ user.username }}.</p>
+    
+        {% if user.is_restaurant_admin %}
+            <p>Eres <strong>Administrador de Restaurante</strong>.</p>
+            <a href="#">Ir a tu Panel de Restaurante (pendiente)</a>
+        {% else %}
+            <p>Eres un usuario normal.</p>
+            <a href="#">Ver mis reservas (pendiente)</a>
+        {% endif %}
+    {% else %}
+        <p>Use el menú para registrarse o iniciar sesión.</p>
+        <a href="{% url 'usuarios:login' %}">Iniciar sesión</a> |
+        <a href="{% url 'usuarios:signup' %}">Registrarse</a>
+    {% endif %}
 {% endblock %}
