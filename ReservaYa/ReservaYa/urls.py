@@ -1,4 +1,5 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,6 +17,13 @@ urlpatterns = [
 
     # Otras apps, si las tuviera
     # path('restaurantes/', include('Restaurantes.urls', namespace='restaurantes')),
+=======
+from django.urls import include, path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('reservas/', include('Reservas.urls')),
+>>>>>>> Reservas
 ]
 
 # Servir archivos media durante desarrollo
