@@ -10,6 +10,12 @@ from django.db.models import Q
 from django.urls import reverse
 from django.conf import settings
 from .models import Restaurante, Mesa, RestauranteAdmin
+
+
+from Reservas.models import Reserva  # Importa el modelo Reserva
+from django.utils.dateparse import parse_date  # Importa parse_date
+
+
 # Configurar logger (opcional pero útil para debugging)
 logger = logging.getLogger(__name__)
 

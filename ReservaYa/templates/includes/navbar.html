@@ -1,10 +1,68 @@
-<nav>
-    <a href="/">Inicio</a>
-    {% if user.is_authenticated %}
-        <a href="{% url 'usuarios:profile' %}">Mi Perfil</a>
-        <a href="{% url 'account_logout' %}">Cerrar sesión</a>
-    {% else %}
-        <a href="{% url 'usuarios:login' %}">Iniciar sesión</a>
-        <a href="{% url 'usuarios:signup' %}">Registrarse</a>
-    {% endif %}
-</nav>
+{% comment %} <nav class="navbar">
+    <a href="{% url 'home' %}" class="logo">ReservaYa</a>
+    <div class="menu">
+        {% if user.is_authenticated %}
+            <a href="{% url 'usuarios:profile' %}">Mi Perfil</a>
+            <a href="{% url 'usuarios:logout' %}" class="logout">Cerrar sesión</a>
+        {% else %}
+            <a href="{% url 'usuarios:login' %}">Iniciar sesión</a>
+            <a href="{% url 'usuarios:signup' %}" class="signup">Registrarse</a>
+        {% endif %}
+    </div>
+</nav> {% endcomment %}
+
+<header>
+    <div class="container_nav">
+        <div class="izquierda">
+            <div class="name">
+                {% comment %} <img src="{% static 'IMG/logo 2.png' %}" alt=""> {% endcomment %}
+            </div>
+        </div>
+        <div class="derecha">
+            <ul class="registro">
+                <li class="boton_contacto">
+                    <a href="#contacto">Contacto</a>
+                </li>
+                <li class="boton_contacto">
+                    <a href="quienes_somos">Quiénes somos</a>
+                </li>
+                {% if user.is_authenticated %}
+                    {% if not user.socialaccount_set.exists %}
+                        <li class="boton_contacto">
+                            <a href="">Restaurantes</a>
+                        </li>
+                    {% endif %}
+                <li class="boton_nav">
+                    <a href="{% url 'usuarios:logout' %}">Cerrar sesión</a>
+                </li>
+                <li class="boton_nav" id="userSection">
+                    <a href="" class="user-link">
+                        {% comment %} <div class="user-avatar" style="background-color: {{ user.username|random_color }}">
+                            {% if user.profile.image %}
+                                <img src="{{ user.profile.image.url }}" alt="{{ user.username }}">
+                            {% else %}
+                                {{ user.username|first|upper }}
+                            {% endif %}
+                        </div> {% endcomment %}
+                        <span class="user-name">{{ user.username }}</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="boton_nav" id="registroItem">
+                    <a href="#" class="iniciar_sesion" onclick="abrirVentanaEmergente('{% url 'usuarios:signup' %}'); return false;" style="width: 100%; height: 100%;">Registrarse</a>
+                </li>
+                <li class="boton_nav" id="loginItem">
+                    <a href="#" class="iniciar_sesion" onclick="abrirVentanaEmergente('{% url 'usuarios:login' %}'); return false;" style="width: 100%; height: 100%;">Iniciar Sesión</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="container_prin">
+        <div class="mid">
+            <h1>ReservaYa</h1>
+            <p>Tu app de reservas rápida y confiable</p>
+        </div>
+    </div>
+</header>

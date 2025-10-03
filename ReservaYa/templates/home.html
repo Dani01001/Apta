@@ -3,21 +3,215 @@
 {% block title %}Inicio - ReservaYa{% endblock %}
 
 {% block content %}
-    <h1>Bienvenido a ReservaYa</h1>
+<main>
+   <div class="box">
+        <section class="menu-rest">
+            <h1 class="animation">Restaurantes Destacados</h1>
+            <div class="menu-container animation">
+                <button class="arrow left">&#10094;</button>
+                <div class="menu-wrapper">
+                    <div class="menu" id="menuScroll">
+                        <div class="card">
+                            <a href="">
+                                <img src="https://karmar.com.py/upload/desanegocio_imagenes/ldo_centro_patio.jpg" alt="Hamburguesa">
+                                <div class="card-content">
+                                    <h3>Lo de Osvaldo - Centro</h3>
+                                    <div class="ubicacion">
+                                        <div class="txt-detalles">
+                                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                                        </div>
+                                    </div>
+                                    <!-- <span class="price">35.000 Gs.</span> -->
+                                    <div class="rating">⭐⭐⭐⭐☆ (4.6)</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card">
+                            <a href="">
+                                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEitbizuQVgjQmRdey0eUTM7Il7uda7K5q-9SeBPFeesQeHkV9qukehPj6MtdECY1IB_3nUps9t-MQKflPQC4COzmD1uocaLXKIDvA8LgWQe0RJoEho55JkwLVIYlSPze3fRNqjo5jNvC6E/s1600/IMG_8040.JPG" alt="Pizza">
+                                <div class="card-content">
+                                    <h3>Bar San Roque</h3>
+                                    <div class="ubicacion">
+                                        <div class="txt-detalles">
+                                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                                        </div>
+                                    </div>
+                                    <!-- <span class="price">50.000 Gs.</span> -->
+                                    <div class="rating">⭐⭐⭐⭐⭐ (4.5)</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card">
+                            <a href="">
+                                <img src="https://www.barsanmiguel.com.py/wp-content/uploads/2022/10/porton-adelante-1.jpg" alt="Sushi">
+                                <div class="card-content">
+                                    <h3>San Miguel</h3>
+                                    <div class="ubicacion">
+                                        <div class="txt-detalles">
+                                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                                        </div>
+                                    </div>
+                                    <!-- <span class="price">70.000 Gs.</span> -->
+                                    <div class="rating">⭐⭐⭐⭐☆ (4.6)</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card">
+                            <a href="">
+                                <img src="https://alacarta.com.py/filemanager/photos/15/REVISTAS/101/cocinaconfuego/fachada.png" alt="Ensalada">
+                                <div class="card-content">
+                                    <h3>Alma Cocina con Fuego</h3>
+                                    <div class="ubicacion">
+                                        <div class="txt-detalles">
+                                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                                        </div>
+                                    </div>
+                                    <!-- <span class="price">30.000 Gs.</span> -->
+                                    <div class="rating">⭐⭐⭐⭐☆  (4.6)</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card">
+                            <a href="">
+                                <img src="https://www.lanacion.com.py/resizer/v2/https%3A%2F%2Farc-anglerfish-arc2-prod-lanacionpy.s3.amazonaws.com%2Fpublic%2FU47WE6RF5BDDRC5BGMDSBU52LU.jpg?auth=cb76e734588e8e593d2d76464475a1e532b9fc7e15fa3a27212205b0a2a9aa91&width=1200&height=630&smart=true" alt="Pasta">
+                                <div class="card-content">
+                                    <h3>Tierra Colorada</h3>
+                                    <div class="ubicacion">
+                                        <div class="txt-detalles">
+                                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                                        </div>
+                                    </div>
+                                    <!-- <span class="price">45.000 Gs.</span> -->
+                                    <div class="rating">⭐⭐⭐⭐☆ (4.7)</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <button class="arrow right">&#10095;</button>
+            </div>
+        </section>
+   </div>           
+    <div class="container_restaurantes">
+        <section class="restaurante1 animation">
+            <div class="container_rest">
+                <div class="image_rest">
+                    <!-- imagen del restaurante -->
+                    <img src="https://karmar.com.py/upload/desanegocio_imagenes/ldo_centro_patio.jpg" alt="Imagen del restaurante">
+                </div>
+                <div class="sucursal">
+                    <!-- Sucursal del restaurante -->
+                    <p>Lo de Osvaldo - Centro</p>
+                    <br>
+                    <div class="ubicacion">
+                        <div class="txt-detalles">
+                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="reservar">
+                    <a class="boton" href="">ReservaYa</a>
+                </div>
+            </div>
+        </section>
 
-    {% if user.is_authenticated %}
-        <p>Hola, {{ user.username }}.</p>
-    
-        {% if user.is_restaurant_admin %}
-            <p>Eres <strong>Administrador de Restaurante</strong>.</p>
-            <a href="#">Ir a tu Panel de Restaurante (pendiente)</a>
-        {% else %}
-            <p>Eres un usuario normal.</p>
-            <a href="#">Ver mis reservas (pendiente)</a>
-        {% endif %}
-    {% else %}
-        <p>Use el menú para registrarse o iniciar sesión.</p>
-        <a href="{% url 'usuarios:login' %}">Iniciar sesión</a> |
-        <a href="{% url 'usuarios:signup' %}">Registrarse</a>
-    {% endif %}
+        <section class="restaurante2 animation">
+            <div class="container_rest">
+                <div class="image_rest">
+                    <!-- imagen del restaurante -->
+                    <img src="https://www.barsanmiguel.com.py/wp-content/uploads/2022/10/porton-adelante-1.jpg" alt="Imagen del restaurante">
+                </div>
+                <div class="sucursal">
+                    <!-- Sucursal del restaurante -->
+                    <p>San Miguel</p>
+                    <br>
+                    <div class="ubicacion">
+                        <div class="txt-detalles">
+                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="reservar">
+                    <a class="boton" href="">ReservaYa</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="restaurante3 animation">
+            <div class="container_rest">
+                <div class="image_rest">
+                    <!-- imagen del restaurante -->
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEitbizuQVgjQmRdey0eUTM7Il7uda7K5q-9SeBPFeesQeHkV9qukehPj6MtdECY1IB_3nUps9t-MQKflPQC4COzmD1uocaLXKIDvA8LgWQe0RJoEho55JkwLVIYlSPze3fRNqjo5jNvC6E/s1600/IMG_8040.JPG" alt="Imagen del restaurante">
+                </div>
+                <div class="sucursal">
+                    <!-- Sucursal del restaurante -->
+                    <p>Bar San Roque</p>
+                    <br>
+                    <div class="ubicacion">
+                        <div class="txt-detalles">
+                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="reservar">
+                    <a class="boton" href="">ReservaYa</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="restaurante4 animation">
+            <div class="container_rest">
+                <div class="image_rest">
+                    <!-- imagen del restaurante -->
+                    <img src="https://alacarta.com.py/filemanager/photos/15/REVISTAS/101/cocinaconfuego/fachada.png" alt="Imagen del restaurante">
+                </div>
+                <div class="sucursal">
+                    <!-- Sucursal del restaurante -->
+                    <p>Alma Cocina con Fuego</p>
+                    <br>
+                    <div class="ubicacion">
+                        <div class="txt-detalles">
+                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="reservar">
+                    <a class="boton" href="">ReservaYa</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="restaurante5 animation">
+            <div class="container_rest">
+                <div class="image_rest">
+                    <!-- imagen del restaurante -->
+                    <img src="https://www.lanacion.com.py/resizer/v2/https%3A%2F%2Farc-anglerfish-arc2-prod-lanacionpy.s3.amazonaws.com%2Fpublic%2FU47WE6RF5BDDRC5BGMDSBU52LU.jpg?auth=cb76e734588e8e593d2d76464475a1e532b9fc7e15fa3a27212205b0a2a9aa91&width=1200&height=630&smart=true" alt="Imagen del restaurante">
+                </div>
+                <div class="sucursal">
+                    <!-- Sucursal del restaurante -->
+                    <p>Tierra Colorada</p>
+                    <br>
+                    <div class="ubicacion">
+                        <div class="txt-detalles">
+                            <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="reservar">
+                    <a class="boton" href="">ReservaYa</a>
+                </div>
+            </div>
+        </section>
+    </div> 
+</main>
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="#">Términos</a> | 
+        <a href="#">Privacidad</a> | 
+        <a href="#">Contacto</a>
+    </div>
+    <p>&copy; 2025 ReservaYa. Todos los derechos reservados.</p>
+</footer>
+
 {% endblock %}

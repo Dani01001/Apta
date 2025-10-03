@@ -1,16 +1,16 @@
-{% extends "base.html" %}
-{% load socialaccount %}
-{% block title %}Iniciar sesión{% endblock %}
-
-{% block content %}
-<h2>Acceso</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
+{% load static %}
+<form id="formLogin" class="login" method="POST">
+  {% csrf_token %}
+  <h2>Inicio de Sesión</h2>
+  <div class="form_input">
+    <label for="username">Usuario:</label>
+    <input type="text" id="username" name="username" required>
+  </div>
+  <div class="form_input">
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" required>
+  </div>
+  <div class="form_input">
+    <button type="submit">Iniciar Sesión</button>
+  </div>
 </form>
-
-<hr>
-<p>O accede con:</p>
-<a href="{% provider_login_url 'google' %}">Google</a>
-{% endblock %}
