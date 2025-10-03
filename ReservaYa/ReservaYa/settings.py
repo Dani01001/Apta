@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'Restaurantes',
     'Usuarios',
     'rest_framework',
-    'Reservas',
 ]
 
 # AUTH_USER_MODEL

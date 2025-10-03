@@ -5,7 +5,7 @@ from .models import Reserva
 # También necesitamos serializadores para los modelos relacionados
 # Si están en otras apps, los importamos. Asumo que Usuario está en 'Usuarios'
 # y Mesa/Restaurante están en 'Restaurantes'. Ajusta las rutas según tu estructura real.
-from Usuarios.models import Usuario # Ajusta si es necesario
+from Usuarios.models import CustomUser # Ajusta si es necesario
 from Restaurantes.models import Mesa, Restaurante # Ajusta si es necesario
 
 # --- Serializadores para Modelos Relacionados (Opcionales pero útiles) ---
@@ -16,7 +16,7 @@ class UsuarioReservaSerializer(serializers.ModelSerializer):
     Solo incluye campos esenciales.
     """
     class Meta:
-        model = Usuario
+        model = CustomUser
         fields = ['id', 'username', 'email']
         read_only_fields = fields # Estos campos no se deberían modificar desde la Reserva
 
