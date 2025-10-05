@@ -230,7 +230,6 @@ def obtener_mesas_disponibles_api(request, restaurante_id):
 def formulario_reserva_html(request):
     """
     Vista HTML para mostrar un formulario de reserva.
-    (En la práctica, esto se haría principalmente con JS llamando a la API)
     """
     # Obtener restaurantes activos para el dropdown
     restaurantes = Restaurante.objects.filter(activo=True).order_by('nombre')
