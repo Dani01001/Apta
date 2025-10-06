@@ -1,8 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Mi Perfil{% endblock %}
-
 {% block content %}
-<h2>Perfil de {{ user.nombre }}</h2>
+<h2>Ingresaste como {{ user.nombre }}</h2>
 
 {% if user.foto_perfil %}
     <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" width="120">
@@ -18,4 +15,6 @@
 </ul>
 
 <a href="{% url 'usuarios:profile_edit' %}">Editar perfil</a>
+<br>
+<button onclick="window.close();" type="button">Ir a la página principal</button>
 {% endblock %}
