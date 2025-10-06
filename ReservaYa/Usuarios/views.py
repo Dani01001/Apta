@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from .decorators import restaurant_admin_required
+from Restaurantes.models import Restaurante
 
 
 Usuario = get_user_model()
@@ -28,14 +29,25 @@ def signup_view(request):
 # login
 def login_view(request):
     if request.method == "POST":
-        form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            messages.success(request, "Bienvenido de nuevo, comandante.")
-            return redirect("usuarios:profile")
-    else:
-        form = LoginForm()
-    return render(request, "usuarios/login.html", {"form": form})
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+
+            # 🔹 Aquí entra la redirección según tipo de usuario
+            if hasattr(user, "es_restaurante") and user.es_restaurante:
+                return redirect("usuarios:dashboard_restaurante")
+            else:
+                return redirect("usuarios:dashboard_usuario")
+
+        else:
+            messages.error(request, "Usuario o contraseña incorrectos.")
+            return render(request, "usuarios/login.html")
+
+    return render(request, "usuarios/login.html")
 
 # logout
 def logout_view(request):
@@ -61,9 +73,15 @@ def profile_edit_view(request):
         form = ProfileForm(instance=request.user)
     return render(request, "usuarios/profile_edit.html", {"form": form})
 
-
 def home_view(request):
-    return render(request, "home.html")
+    restaurantes = Restaurante.objects.filter(activo=True)
+    # Agregar atributo temporal `estrellas` para template
+    for r in restaurantes:
+        try:
+            r.estrellas = int(round(getattr(r, 'rating', 4.5)))  # default 4.5 si no hay rating
+        except:
+            r.estrellas = 0
+    return render(request, "home.html", {"restaurantes": restaurantes})
 
 @login_required
 def dashboard(request):

@@ -50,7 +50,7 @@ class Reserva(models.Model):
     estado = models.CharField(
         max_length=15, 
         choices=ESTADO_OPCIONES, 
-        default='confirmada',
+        default='pendiente',
         help_text="Estado actual de la reserva."
     )
     

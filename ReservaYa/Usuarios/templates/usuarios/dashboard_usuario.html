@@ -11,8 +11,8 @@
     <p>Este es tu panel de usuario normal.</p>
 
     <ul>
-        <li><a href="{% url 'reservas:lista' %}">Ver mis reservas</a></li>
-        <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+        <li><a href="{% url 'reservas:api_mis_reservas' %}">Ver mis reservas</a></li>
+        <button onclick="window.close();" type="button">Ir a la página principal</button>
     </ul>
 </body>
 </html>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 <form id="formSignup" class="signup" method="POST">
   {% csrf_token %}
   <h2>Registro de Usuario</h2>
@@ -30,4 +31,11 @@
   <div class="form_input">
     <button type="submit">Registrarse</button>
   </div>
+  <div class="container-otros">
+      <a href="{% provider_login_url 'google' %}" class="google-login-btn">
+          <img src="https://i.blogs.es/dc6737/unnamed/650_1200.png" alt="google icon" style=" width:50px; height:auto;">
+          Iniciar con Google
+      </a>
+  </div>
 </form>
+<a href="{% url 'usuarios:login' %}" class="link-login">¿Ya tienes una cuenta? Inicia aquí</a>

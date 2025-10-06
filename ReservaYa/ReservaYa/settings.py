@@ -58,10 +58,16 @@ AUTHENTICATION_BACKENDS = [
 'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 SITE_ID = 1 
 
+LOGIN_URL = 'usuarios:login'
 LOGIN_REDIRECT_URL = 'usuarios:profile'
-LOGOUT_REDIRECT_URL = 'usuarios:login'
+LOGOUT_REDIRECT_URL = '/'
+
+ACCOUNT_LOGOUT_REDIRECT_URL = "home"
+ACCOUNT_LOGOUT_ON_GET = True
 
 # Allauth
 ACCOUNT_LOGIN_METHODS = {'email', 'username'}
@@ -108,6 +114,20 @@ TEMPLATES = [
         },
     },
 ]
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     "google": {
+#         "APP": {
+#             "client_id": "",
+#             "secret": "",
+#             "key": "",
+#         },
+#         "AUTH_PARAMS": {"access_type": "online"},
+#         "OAUTH_PKCE_ENABLED": True,
+#     }
+# }
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 WSGI_APPLICATION = 'ReservaYa.wsgi.application'
 

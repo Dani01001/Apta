@@ -1,15 +1,15 @@
 # ReservaYa/restaurantes/views.py
 import logging
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.urls import reverse
 from django.conf import settings
 from .models import Restaurante, Mesa, RestauranteAdmin
+import os
 
 
 from Reservas.models import Reserva  # Importa el modelo Reserva
@@ -57,17 +57,23 @@ def lista_restaurantes(request):
 def detalle_restaurante(request, slug):
     """
     Vista pública para mostrar los detalles de un restaurante.
+    Carga la plantilla específica en templates/rest/ según el slug del restaurante.
     """
     restaurante = get_object_or_404(Restaurante, slug=slug, activo=True)
-    
-    # Opcional: Obtener mesas si se necesita mostrar algo
-    # mesas = restaurante.mesas.all() 
-    
+
+    # Convertir guiones a guiones bajos para coincidir con nombres de archivo
+    plantilla_nombre = f"{restaurante.slug.replace('-', '_')}.html"
+    plantilla_ruta = os.path.join('rest', plantilla_nombre)
+
+    # Verificar si la plantilla existe
+    if not os.path.exists(os.path.join(settings.TEMPLATES[0]['DIRS'][0], plantilla_ruta)):
+        # Si no existe, puede cargar una plantilla genérica o mostrar 404
+        return render(request, 'restaurantes/no_disponible.html', {'restaurante': restaurante})
+
     context = {
         'restaurante': restaurante,
-        # 'mesas': mesas,
     }
-    return render(request, 'restaurantes/detalle.html', context)
+    return render(request, plantilla_ruta, context)
 
 # ... (dentro de views.py) ...
 

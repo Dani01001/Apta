@@ -1,16 +1,43 @@
 {% load static %}
-<form id="formLogin" class="login" method="POST">
-  {% csrf_token %}
-  <h2>Inicio de Sesión</h2>
-  <div class="form_input">
-    <label for="username">Usuario:</label>
-    <input type="text" id="username" name="username" required>
-  </div>
-  <div class="form_input">
-    <label for="password">Contraseña:</label>
-    <input type="password" id="password" name="password" required>
-  </div>
-  <div class="form_input">
-    <button type="submit">Iniciar Sesión</button>
-  </div>
-</form>
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de Sesión - ReservaYa</title>
+    <link rel="stylesheet" href="{% static 'CSS/login.css' %}">
+</head>
+<body>
+    <div id="loginModal" class="container-login">
+        <form id="formLogin" class="login" method="POST" action="{% url 'usuarios:login' %}">
+            {% csrf_token %}
+            <h2>Inicio de Sesión</h2>
+            
+            <div class="form_input">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form_input">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form_input">
+                <button type="submit" class="btn-login">Iniciar Sesión</button>
+            </div>
+
+            <div class="container-otros">
+                <a href="{% provider_login_url 'google' %}" class="google-login-btn">
+                    <img src="https://i.blogs.es/dc6737/unnamed/650_1200.png" alt="google icon" style=" width:50px; height:auto;">
+                    Iniciar con Google
+                </a>
+            </div>
+        </form>
+
+        <a href="{% url 'usuarios:signup' %}" class="link-signup">¿No tienes cuenta? Regístrate aquí</a>
+    </div>
+
+    <script src="{% static 'JS/login.js' %}"></script>
+</body>
+</html>

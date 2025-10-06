@@ -11,9 +11,9 @@
     <p>Este es tu panel de administrador de restaurante.</p>
 
     <ul>
-        <li><a href="{% url 'restaurantes:lista' %}">Gestionar restaurantes</a></li>
-        <li><a href="{% url 'reservas:lista' %}">Ver reservas recibidas</a></li>
-        <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+        {% comment %} <li><a href="{% url 'restaurantes:gestionar_restaurante' %}">Gestionar restaurantes</a></li> {% endcomment %}
+        <li><a href="{% url 'reservas:api_mis_reservas' %}">Ver reservas recibidas</a></li>
+        <button onclick="window.close();" type="button">Ir a la página principal</button>
     </ul>
 </body>
 </html>

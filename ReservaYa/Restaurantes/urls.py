@@ -2,7 +2,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'restaurantes' # Namespace para URLs (opcional pero recomendado)
+app_name = "restaurantes"
 
 urlpatterns = [
     # === VISTAS PÚBLICAS (Para Clientes y Visitantes) ===

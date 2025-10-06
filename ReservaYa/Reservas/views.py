@@ -10,37 +10,29 @@ from .serializers import ReservaSerializer, CrearReservaSerializer
 from Restaurantes.models import Restaurante  # Ajusta la ruta si es necesario
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date, parse_time
-from decimal import Decimal, InvalidOperation
-
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 # Vista para crear una reserva (API)
-@csrf_exempt  # Desactivamos CSRF para esta vista API, pero en producción considera usar tokens
-@require_http_methods(["POST"])
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def crear_reserva_api(request):
     """
-    Vista API para crear una nueva reserva.
-    Recibe datos JSON en el cuerpo de la solicitud.
+    Crear una reserva usando el usuario logueado.
     """
-    try:
-        data = json.loads(request.body.decode('utf-8'))
-    except json.JSONDecodeError:
-        return JsonResponse({'error': 'JSON inválido'}, status=400)
-
-    # Crear una instancia del serializador con los datos recibidos
-    serializer = CrearReservaSerializer(data=data, context={'request': request})
-    
+    serializer = CrearReservaSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
         try:
-            # El método `create` del serializador maneja la lógica de negocio
             reserva = serializer.save()
-            # Serializar la reserva creada para la respuesta
-            reserva_serializer = ReservaSerializer(reserva)
-            return JsonResponse(reserva_serializer.data, status=201)
+            return Response(ReservaSerializer(reserva).data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            # Capturar errores específicos del serializador o de validación
-            return JsonResponse({'error': str(e)}, status=400)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     else:
-        # Si la validación falla, devolver errores del serializador
-        return JsonResponse(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 # Vista para listar reservas del usuario autenticado (API)
@@ -250,3 +242,10 @@ def mis_reservas_html(request):
         'reservas': reservas
     }
     return render(request, 'reservas/mis_reservas.html', context)
+
+
+@login_required
+def reservas_view(request):
+    restaurante_id = request.GET.get('restaurante')
+    context = {'restaurante_id': restaurante_id,}
+    return render(request, 'reservas.html', context)

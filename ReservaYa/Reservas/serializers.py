@@ -7,6 +7,9 @@ from .models import Reserva
 # y Mesa/Restaurante están en 'Restaurantes'. Ajusta las rutas según tu estructura real.
 from Usuarios.models import CustomUser # Ajusta si es necesario
 from Restaurantes.models import Mesa, Restaurante # Ajusta si es necesario
+from django.utils import timezone
+from datetime import datetime, timedelta
+from .models import Reserva, Mesa, Restaurante
 
 # --- Serializadores para Modelos Relacionados (Opcionales pero útiles) ---
 
@@ -109,20 +112,10 @@ class ReservaSerializer(serializers.ModelSerializer):
 # --- Serializador para Crear una Reserva (Ejemplo) ---
 # Este serializador podría ser usado específicamente para la acción de crear,
 # donde algunos campos son obligatorios o se manejan de forma diferente.
-
 class CrearReservaSerializer(serializers.ModelSerializer):
-    """
-    Serializador específico para la creación de una reserva.
-    Se enfoca en los datos de entrada del usuario.
-    """
-    # El usuario se obtendrá del request, no del cuerpo de la solicitud
     usuario = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    
-    # La mesa se seleccionará basándose en disponibilidad, no se pasa directamente
-    # Para simplificar, podríamos pasar 'mesa_id' y validarlo, o hacerlo en la vista.
-    # mesa_id = serializers.IntegerField(write_only=True) 
-    
-    # Campos de entrada
+    nombre_cliente = serializers.CharField(required=False)
+
     restaurante_id = serializers.IntegerField(write_only=True)
     fecha = serializers.DateField()
     hora = serializers.TimeField()
@@ -132,43 +125,43 @@ class CrearReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = [
-            'usuario', 'restaurante_id', 'fecha', 'hora', 'duracion_horas', 'cantidad_personas', 'nombre_cliente'
-            # 'mesa_id' # Si se usara
+            'usuario', 'restaurante_id', 'fecha', 'hora', 
+            'duracion_horas', 'cantidad_personas', 'nombre_cliente'
         ]
 
     def validate(self, data):
-        """
-        Validación compleja para la creación, como verificar disponibilidad.
-        Esta lógica también puede residir en la vista o en un servicio.
-        """
-        from datetime import datetime, timedelta
-        # from .models import Mesa # Asegúrate de importar Mesa
-        
         usuario = data['usuario']
         restaurante_id = data['restaurante_id']
         fecha = data['fecha']
         hora = data['hora']
         duracion_horas = float(data['duracion_horas'])
         cantidad_personas = data['cantidad_personas']
-        
-        # 1. Verificar que el restaurante exista
+
+        # 1️⃣ Fecha no puede ser anterior al día actual
+        if fecha < timezone.localdate():
+            raise serializers.ValidationError("❌ La fecha no puede ser anterior al día de hoy.")
+
+        # 2️⃣ Duración máxima 3 horas
+        if duracion_horas > 3:
+            raise serializers.ValidationError("❌ La duración máxima es de 3 horas.")
+
+        # 3️⃣ Restaurante válido
         try:
             restaurante = Restaurante.objects.get(id=restaurante_id)
         except Restaurante.DoesNotExist:
-            raise serializers.ValidationError("El restaurante especificado no existe.")
-            
-        # 2. Encontrar mesas disponibles (capacidad suficiente)
+            raise serializers.ValidationError("❌ Restaurante no existe.")
+
+        # 4️⃣ Mesas disponibles según cantidad de personas
         mesas_posibles = Mesa.objects.filter(restaurante=restaurante, capacidad__gte=cantidad_personas)
         if not mesas_posibles.exists():
-             raise serializers.ValidationError("No hay mesas disponibles para esa cantidad de personas en ese restaurante.")
-             
-        # 3. Verificar disponibilidad horaria (lógica simplificada)
+            raise serializers.ValidationError("❌ No hay mesas disponibles para esa cantidad de personas.")
+
+        # 5️⃣ Verificar solapamiento horario
         fecha_hora_inicio = datetime.combine(fecha, hora)
         fecha_hora_fin = fecha_hora_inicio + timedelta(hours=duracion_horas)
-        
         mesa_disponible = None
+
         for mesa in mesas_posibles:
-            # Obtener reservas para esa mesa en esa fecha
             reservas_dia = Reserva.objects.filter(mesa=mesa, fecha=fecha)
             solapada = False
             for r in reservas_dia:
@@ -180,26 +173,22 @@ class CrearReservaSerializer(serializers.ModelSerializer):
             if not solapada:
                 mesa_disponible = mesa
                 break
-                
+
         if not mesa_disponible:
-            raise serializers.ValidationError("No hay mesas libres en ese horario para ese restaurante.")
-            
-        # Guardar la mesa encontrada en el contexto para usarla en la vista
+            raise serializers.ValidationError("❌ No hay mesas libres en ese horario para ese restaurante.")
+
+        # Guardar la mesa asignada en el contexto
         self.context['mesa_asignada'] = mesa_disponible
-        
         return data
 
     def create(self, validated_data):
-        """
-        Crear la instancia de Reserva.
-        """
-        # Remover campos que no pertenecen al modelo Reserva
-        validated_data.pop('restaurante_id', None)
-        # La mesa se obtiene del contexto (calculado en validate)
         mesa = self.context.get('mesa_asignada')
         if not mesa:
             raise serializers.ValidationError("No se pudo asignar una mesa.")
-            
+
+        # Generar nombre del cliente si no se pasa
+        nombre_cliente = validated_data.get('nombre_cliente') or validated_data['usuario'].username
+
         reserva = Reserva.objects.create(
             usuario=validated_data['usuario'],
             mesa=mesa,
@@ -207,6 +196,7 @@ class CrearReservaSerializer(serializers.ModelSerializer):
             hora=validated_data['hora'],
             duracion_horas=validated_data['duracion_horas'],
             cantidad_personas=validated_data['cantidad_personas'],
-            nombre_cliente=validated_data.get('nombre_cliente', validated_data['usuario'].username)
+            nombre_cliente=nombre_cliente,
+            estado='pendiente'  # ✅ Reserva siempre inicia como pendiente
         )
         return reserva

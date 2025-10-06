@@ -1,0 +1,199 @@
+<header>
+    <nav class="minimal-header">
+        <!-- Logo -->
+        <a href="/" class="logo">ReservaYa</a>
+
+        <!-- Toggle para móvil -->
+        <input type="checkbox" id="menu-toggle" class="menu-toggle"/>
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
+
+        <!-- Links de navegación -->
+        <ul class="nav-links">
+            <li><a href="#contacto">Contacto</a></li>
+            {% comment %} <li><a href="{% url 'quienes_somos' %}">Quiénes somos</a></li> {% endcomment %}
+
+            {% if user.is_authenticated %}
+                <!-- Usuario logueado -->
+                <li class="usuario-info">
+                    <span class="nombre-usuario">{{ user.username }}</span>
+                    {% comment %} <a href="{% url 'usuario' %}" class="btn-perfil">Mi perfil</a> {% endcomment %}
+                </li>
+            {% else %}
+                <!-- Usuario no logueado -->
+                <li>
+                    <a href="#" class="btn" onclick="abrirVentanaEmergente('{% url 'usuarios:signup' %}'); return false;">Registro</a>
+                </li>
+                <li>
+                    <a href="#" class="btn" onclick="abrirVentanaEmergente('{% url 'usuarios:login' %}'); return false;">Iniciar Sesión</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+<style>
+    :root {
+        --primary-color: #730707;      /* Rojo vino */
+        --secondary-color: #590202;   /* Rojo oscuro */
+        --accent-color: #BFBFBF;      /* Gris claro */
+        --background-gradient: linear-gradient(to bottom, #f2f2f2, #d9d9d9); /* Vertical */
+    }
+
+    .minimal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        background: var(--background-gradient);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        position: relative;
+        animation: fadeInDown 1s ease;
+        border-bottom: 2px solid var(--accent-color);
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        text-decoration: none;
+        letter-spacing: 1px;
+        transition: color 0.3s ease;
+    }
+
+    .logo:hover { 
+        color: var(--secondary-color); 
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 1.8rem;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links li a {
+        text-decoration: none;
+        color: var(--primary-color);
+        font-weight: 500;
+        position: relative;
+        padding: 6px 15px;
+        transition: color 0.3s ease;
+    }
+    .nav-links li, .usuario-info {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        /* Elimina padding/margin vertical si hay */
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links li a, .btn-perfil, .nombre-usuario {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        /* Elimina padding/margin vertical si hay */
+        margin: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    
+    /* Subrayado animado */
+    .nav-links li a::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: var(--secondary-color);
+        transition: width 0.3s ease;
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+    }
+    .nav-links li a:hover::after { 
+        width: 100%; 
+    }
+
+    /* Botón */
+    .btn {
+        background-color: var(--primary-color);
+        color: #fff !important;
+        padding: 0.4rem 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(115,7,7,0.18);
+        transition: background 0.3s ease, transform 0.2s ease;
+        font-weight: 600;
+    }
+    .btn:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px) scale(1.05);
+    }
+
+    /* Info usuario */
+    .usuario-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    .nombre-usuario {
+        font-size: 1.1rem;
+        color: var(--secondary-color);
+    }
+
+    .btn-perfil {
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--primary-color);
+        background: #ffffff6c;
+        color: #333;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+    .btn-perfil:hover {
+        background-color: var(--secondary-color);
+        color: #fff;
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(77,5,5,0.25);
+    }
+
+    /* Responsive */
+    .menu-icon {
+        display: none;
+        font-size: 2rem;
+        cursor: pointer;
+        user-select: none;
+    }
+    .menu-toggle { display: none; }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            flex-direction: column;
+            background: var(--background-gradient);
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border-left: 2px solid var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+        .menu-toggle:checked + .menu-icon + .nav-links {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .menu-icon { display: block; }
+    }
+
+    /* Animación entrada */
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

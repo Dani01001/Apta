@@ -7,15 +7,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'), 
 
-    # URLs de la app Usuarios
+    path('restaurantes/', include('Restaurantes.urls', namespace='restaurantes')), 
     path('usuarios/', include('Usuarios.urls', namespace='usuarios')),
-
-    # URLs de django-allauth (Google login, registro social)
     path('accounts/', include('allauth.urls')),
-
-    # Otras apps, si las tuviera
-    # path('restaurantes/', include('Restaurantes.urls', namespace='restaurantes')),
-
     path('reservas/', include('Reservas.urls')),
 ]
 
