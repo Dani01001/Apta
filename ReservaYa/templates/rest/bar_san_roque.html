@@ -13,12 +13,12 @@
     <main>
         <div class="container_prin">
             <div class="img-zoom">
-                <img src="https://lh5.googleusercontent.com/p/AF1QipPOI9bYC1jebU9ryY3QXekaKQt2lWhLwBXLxI7U=w596-h298-k-no" alt="La Farola">
+                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/d5/37/01/um-dos-ambientes.jpg?w=900&h=-1&s=1" alt="Imagen del bar san Roque">
             </div>
             <div class="informacion">
                 <h1>Bar San Roque</h1>
-                <p>La Farola es un restaurante popular en Asunción, conocido por su ambiente acogedor y familiar. Su menú ofrece un buffet por kilo con una amplia variedad de platos locales e internacionales, incluyendo opciones de desayunos, almuerzos, postres y helados. Los viernes se destacan las parrilladas al aire libre, que atraen a muchos comensales. También ofrece servicios de almuerzos empresariales con pagos mensuales para empresas, brindando comodidad y calidad a sus clientes. <br><br>La Farola es reconocida por su limpieza, servicio confiable y ambiente agradable, lo que la convierte en una opción frecuente tanto para locales como para turistas. Su ubicación céntrica en la esquina de Constitución y Pettirossi facilita el acceso y la hace un punto habitual de encuentro para disfrutar de una buena comida en cualquier momento del día.<br><br> Recientemente, el restaurante ha sido destacado en guías gastronómicas locales por su autenticidad y calidad, consolidándose como un referente de la gastronomía en Asunción.</p>
-                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=2')">Reservar Mesa</button>
+                <p>El Bar San Roque es un restaurante y bar histórico en el centro de Asunción, Paraguay, conocido por su ambiente clásico, comida que combina la cocina paraguaya y alemana, y su larga tradición desde sus inicios en 1900. Fundado por un español, fue adquirido en 1947 por la familia Knapps, quienes lo mantienen hasta hoy como un patrimonio cultural de la ciudad, ofreciendo platos como la corvina frita y la milanesa.</p>
+                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=2')">Reservar Mesa</button>
             </div>
             <div class="container_sections">
                 <div class="box">
@@ -89,7 +89,7 @@
                     </section>
                     <section class="detalles animation">
                         <h1>Detalles</h1>
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.3624417028036!2d-57.62555269999999!3d-25.292024099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da7e14a009ccf%3A0x1162f1f7b715df10!2sLa%20Farola%20Restaurante!5e0!3m2!1sen!2spy!4v1756608202716!5m2!1sen!2spy" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5660551568285!2d-57.628045900000004!3d-25.285179199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da7ef1f23f431%3A0x454b6a24a0e1608a!2sBar%20San%20Roque!5e0!3m2!1sen!2spy!4v1759796236758!5m2!1sen!2spy" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         <div class="detalles-columnas">
                             <section class="detalle-1">
                                 <div class="detalle-item">
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="txt-detalles">
                                         <span>Ubicación</span>
-                                        <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción 001101</a>
+                                        <a href="https://maps.app.goo.gl/mKwfjzZ8KFYYfGEBA" target="_blank" rel="noopener">Asunción 001218</a>
                                     </div>
                                 </div>
                                 <div class="detalle-item">
@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="txt-detalles">
                                         <span>Sitio web</span>
-                                        <a href="https://www.instagram.com/lafarolarestaurantepy/" target="_blank" rel="noopener">La Farola (ig)</a>
+                                        <a href="https://www.instagram.com/barsanroquepy/" target="_blank" rel="noopener">barsanroquepy (ig)</a>
                                     </div>
                                 </div>
                                 <div class="detalle-item">
@@ -209,7 +209,7 @@
                 </div>
             </div>
         </div>
-        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=2')">
+        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=2')">
             <span class="short">R</span>
             <span class="long"><b>Mesas Disponibles</b><br>Reserva!!</span>
         </div>

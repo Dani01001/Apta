@@ -13,12 +13,12 @@
     <main>
         <div class="container_prin">
             <div class="img-zoom">
-                <img src="https://lh5.googleusercontent.com/p/AF1QipPOI9bYC1jebU9ryY3QXekaKQt2lWhLwBXLxI7U=w596-h298-k-no" alt="La Farola">
+                <img src="https://www.lodeosvaldo.com.py/uploads/imagenes/20240822/carrusel-ldo-plg-1.jpg" alt="Img del restaurante de lo de osvaldo">
             </div>
             <div class="informacion">
-                <h1>Talleyrand Costanera</h1>
-                <p>La Farola es un restaurante popular en Asunción, conocido por su ambiente acogedor y familiar. Su menú ofrece un buffet por kilo con una amplia variedad de platos locales e internacionales, incluyendo opciones de desayunos, almuerzos, postres y helados. Los viernes se destacan las parrilladas al aire libre, que atraen a muchos comensales. También ofrece servicios de almuerzos empresariales con pagos mensuales para empresas, brindando comodidad y calidad a sus clientes. <br><br>La Farola es reconocida por su limpieza, servicio confiable y ambiente agradable, lo que la convierte en una opción frecuente tanto para locales como para turistas. Su ubicación céntrica en la esquina de Constitución y Pettirossi facilita el acceso y la hace un punto habitual de encuentro para disfrutar de una buena comida en cualquier momento del día.<br><br> Recientemente, el restaurante ha sido destacado en guías gastronómicas locales por su autenticidad y calidad, consolidándose como un referente de la gastronomía en Asunción.</p>
-                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=2')">Reservar Mesa</button>
+                <h1>Lo de Osvaldo</h1>
+                <p>"Lo de Osvaldo" es un restaurante paraguayo en Asunción que fusiona la pasión por el fútbol con una propuesta gastronómica de asado y parrilladas, ofreciendo cortes de carne de primera calidad. El local es un homenaje a la historia del fútbol paraguayo y a su máximo dirigente, Osvaldo Domínguez Dibb. Su menú temático, con nombres de secciones como "La Previa" o "Equipo titular", complementa la experiencia culinaria en un ambiente rústico y casual. </p>
+                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=1')">Reservar Mesa</button>
             </div>
             <div class="container_sections">
                 <div class="box">
@@ -89,7 +89,7 @@
                     </section>
                     <section class="detalles animation">
                         <h1>Detalles</h1>
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.3624417028036!2d-57.62555269999999!3d-25.292024099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da7e14a009ccf%3A0x1162f1f7b715df10!2sLa%20Farola%20Restaurante!5e0!3m2!1sen!2spy!4v1756608202716!5m2!1sen!2spy" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57719.9438759793!2d-57.70446545136719!3d-25.28751789999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da7ef592f6699%3A0xaefa69b638af0c0b!2sLo%20De%20Osvaldo%20-%20Centro!5e0!3m2!1sen!2spy!4v1759796581236!5m2!1sen!2spy" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         <div class="detalles-columnas">
                             <section class="detalle-1">
                                 <div class="detalle-item">
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="txt-detalles">
                                         <span>Ubicación</span>
-                                        <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción 001101</a>
+                                        <a href="https://maps.app.goo.gl/GCBSjpVg441gC4rr9" target="_blank" rel="noopener">Cerro Corá 883, Asunción 001219</a>
                                     </div>
                                 </div>
                                 <div class="detalle-item">
@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="txt-detalles">
                                         <span>Sitio web</span>
-                                        <a href="https://www.instagram.com/lafarolarestaurantepy/" target="_blank" rel="noopener">La Farola (ig)</a>
+                                        <a href="https://www.lodeosvaldo.com.py" target="_blank" rel="noopener">Lo de osvaldo</a>
                                     </div>
                                 </div>
                                 <div class="detalle-item">
@@ -209,7 +209,7 @@
                 </div>
             </div>
         </div>
-        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=2')">
+        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=1')">
             <span class="short">R</span>
             <span class="long"><b>Mesas Disponibles</b><br>Reserva!!</span>
         </div>
@@ -219,7 +219,7 @@
 
     <script>
         window.SERVER_HOST = "{{ SERVER_HOST }}";
-        const restaurante_id = 2;
+        const restaurante_id = 1;
     </script>
     <script src="{% static 'JS/script.js' %}"></script>
 </body>

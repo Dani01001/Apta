@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad - Apta | ReservaYa</title>
+    <link rel="icon" href="{% static 'IMG/apta_logo.png' %}" type="image/x-icon">
+    <style>
+        :root{
+            --bg:#1a0d0d;
+            --card:#240f10;
+            --muted:#d6b3b3;
+            --accent:#c0392b;
+            --accent-2:#e74c3c;
+            --glass: rgba(255,255,255,0.03);
+            --radius:12px;
+            --maxw:1100px;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        *{box-sizing:border-box; margin:0; padding:0;}
+        body{background:var(--bg); color:var(--muted); line-height:1.6;}
+        a{color:var(--accent-2); text-decoration:none;}
+        a:hover{color:#ff6f61;}
+        h1, h2, h3{color:var(--accent-2);}
+        h1.titulo_1{font-size:2.5rem; text-align:center; margin:30px 0;}
+        h1.titulo{font-size:1.8rem; margin-top:30px; border-left:5px solid var(--accent); padding-left:10px;}
+
+        .container_info{
+            max-width:var(--maxw);
+            margin:40px auto;
+            padding:30px;
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:0 6px 20px rgba(192,57,43,0.35);
+        }
+
+        .info p{margin-bottom:16px; color:var(--muted);}
+        .info ul{margin-left:20px; list-style:disc;}
+        .info li{margin-bottom:10px;}
+
+        footer{
+            text-align:center;
+            color:var(--muted);
+            margin-top:40px;
+            font-size:13px;
+        }
+
+        /* Responsive */
+        @media(max-width:900px){
+            .container_info{padding:20px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container_info">
+        <h1 class="titulo_1">Política de Privacidad</h1>
+        <div class="info">
+            <p>En Apta, nos comprometemos a proteger la privacidad de todos los usuarios que utilizan nuestra plataforma <strong>ReservaYa</strong>. Esta Política de Privacidad explica qué información recopilamos, cómo la usamos y los derechos que usted tiene sobre sus datos.</p>
+
+            <h1 class="titulo">1. Información que recopilamos</h1>
+            <p>Podemos recopilar los siguientes tipos de información:</p>
+            <ul>
+                <li><strong>Datos personales:</strong> nombre, correo electrónico, teléfono, información de cuenta y preferencias.</li>
+                <li><strong>Datos de uso:</strong> registros de reservas, interacciones con la plataforma y servicios utilizados.</li>
+                <li><strong>Datos técnicos:</strong> dirección IP, tipo de dispositivo, navegador y sistema operativo.</li>
+            </ul>
+
+            <h1 class="titulo">2. Uso de la información</h1>
+            <p>La información recopilada se utiliza para:</p>
+            <ul>
+                <li>Proporcionar, mantener y mejorar nuestros servicios.</li>
+                <li>Personalizar la experiencia del usuario.</li>
+                <li>Enviar información relevante sobre nuestras plataformas y promociones.</li>
+                <li>Garantizar la seguridad de nuestras operaciones y prevenir fraudes.</li>
+            </ul>
+
+            <h1 class="titulo">3. Compartir información</h1>
+            <p>No vendemos ni alquilamos información personal a terceros. Podemos compartir datos con:</p>
+            <ul>
+                <li>Proveedores de servicios que faciliten la operación de la plataforma.</li>
+                <li>Autoridades competentes en caso de requerimiento legal.</li>
+            </ul>
+
+            <h1 class="titulo">4. Seguridad</h1>
+            <p>Implementamos medidas de seguridad técnicas y organizativas para proteger sus datos frente a accesos no autorizados, pérdidas o alteraciones. Sin embargo, ningún sistema es 100% infalible.</p>
+
+            <h1 class="titulo">5. Retención de datos</h1>
+            <p>Mantenemos sus datos personales mientras sean necesarios para cumplir con los fines descritos en esta política o según lo exija la ley.</p>
+
+            <h1 class="titulo">6. Derechos del usuario</h1>
+            <p>Usted puede en cualquier momento:</p>
+            <ul>
+                <li>Acceder a su información personal.</li>
+                <li>Solicitar la corrección o eliminación de sus datos.</li>
+                <li>Revocar su consentimiento para determinados usos.</li>
+            </ul>
+
+            <h1 class="titulo">7. Cambios en esta política</h1>
+            <p>Podemos actualizar esta política periódicamente. Las modificaciones se publicarán en esta página y entrarán en vigor al momento de su publicación.</p>
+
+            <h1 class="titulo">8. Contacto</h1>
+            <p>Para cualquier consulta sobre la privacidad de sus datos, puede contactarnos en <a href="mailto:reservaya010.com">reservaya010@apta.com</a>.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Apta - Todos los derechos reservados.
+    </footer>
+</body>
+</html>

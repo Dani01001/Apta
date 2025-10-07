@@ -1,10 +1,156 @@
-{% block title %}Editar Perfil{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Perfil - ReservaYa</title>
+    <style>
+        :root {
+            --primary-color: #730707;
+            --secondary-color: #590202;
+            --accent-color: #FF6B6B; /* color llamativo para avatar */
+            --background-color: #F2F2F2;
+        }
 
-{% block content %}
-<h2>Editar Perfil</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar cambios</button>
-</form>
-{% endblock %}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-editar {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 15px 0;
+            margin-top: 5%;
+        }
+
+        .editar-perfil {
+            width: 100%;
+            max-width: 500px;
+            background-color: #efefef;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(35, 0, 0, 0.3);
+            font-size: 1.05rem;
+        }
+
+        .editar-perfil h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        .editar-perfil form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editar-perfil label {
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .editar-perfil input[type="text"],
+        .editar-perfil input[type="email"],
+        .editar-perfil input[type="file"] {
+            width: 97%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+            font-size: 1rem;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .editar-perfil button {
+            background-color: #ffffff6c;
+            color: #333;
+            border: 1px solid var(--primary-color);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: 0.5s;
+        }
+
+        .editar-perfil button:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(77, 5, 5, 0.18);
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            background-color: var(--accent-color); /* fondo llamativo */
+            font-weight: bold;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        a.cerrar-ventana {
+            display: inline-block;
+            margin-top: 12px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-editar">
+        <div class="editar-perfil">
+            <h2>Editar Perfil</h2>
+
+            {% if user.foto_perfil %}
+                <div class="avatar-preview">
+                    <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil">
+                </div>
+            {% else %}
+                <div class="avatar-preview" style="background-color:#{{ user.avatar_color|default:'FF6B6B' }};">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <label for="username">Nombre de Usuario</label>
+                <input type="text" name="username" id="username" value="{{ user.username }}" required>
+
+                <label for="email">Correo Electronico</label>
+                <input type="email" name="email" id="email" value="{{ user.email }}" required>
+
+                <label for="telefono">Telefono</label>
+                <input type="text" name="telefono" id="telefono" value="{{ user.telefono }}">
+
+                <label for="foto_perfil">Foto de Perfil</label>
+                <input type="file" name="foto_perfil" id="foto_perfil">
+
+                <button type="submit">Guardar cambios</button>
+                <button class="cerrar-ventana" onclick="window.close(); return false;" style="margin-top:20px;">Cerrar ventana</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

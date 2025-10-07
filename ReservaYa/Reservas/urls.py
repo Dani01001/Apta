@@ -5,7 +5,7 @@ from . import views
 app_name = 'reservas' # Namespace para las URLs
 
 urlpatterns = [
-    path('/', views.reservas_view, name='reservas'),
+    path('', views.reservas_view, name='reservas'),
     # === APIs ===
     path('api/crear/', views.crear_reserva_api, name='api_crear_reserva'),
     path('api/mis_reservas/', views.mis_reservas_api, name='api_mis_reservas'),

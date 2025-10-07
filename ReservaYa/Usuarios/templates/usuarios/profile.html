@@ -1,20 +1,156 @@
 {% block content %}
-<h2>Registro exitoso, Bienvenido {{ user.nombre }} !!</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil - ReservaYa</title>
+    <style>
+        :root {
+            --primary-color: #730707;
+            --secondary-color: #590202;
+            --accent-color: #BFBFBF;
+            --background-color: #F2F2F2;
+        }
 
-{% if user.foto_perfil %}
-    <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" width="120">
-{% else %}
-    <div class="avatar" style="background-color:#{{ user.avatar_color }}">
-        {{ user.nombre|first|upper }}
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container-registro {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .registro {
+            width: 100%;
+            max-width: 420px;
+            background-color: #efefef;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 24px rgba(35,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        img, .avatar {
+            border-radius: 50%;
+            margin: 15px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        img:hover, .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(77,5,5,0.3);
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            line-height: 120px;
+            font-size: 3rem;
+            color: #fff;
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            font-size: 1.05rem;
+            text-align: left;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        a, button {
+            display: block;
+            width: 94.5%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.05rem;
+            border: 1px solid var(--primary-color);
+            margin-top: 10px;
+            cursor: pointer;
+            transition: 0.4s ease;
+        }
+        button{
+            width:101%;
+        }
+        a {
+            background-color: #ffffff6c;
+            color: #333;
+        }
+
+        a:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(77,5,5,0.18);
+        }
+
+        button {
+            background-color: #ffffff6c;
+            color: #333;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(77,5,5,0.18);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-registro">
+        <div class="registro">
+            <h2>¡Registro exitoso, Bienvenido {{ user.nombre }}!</h2>
+                <p>Esta es tu foto de perfil.</p>
+            {% if user.foto_perfil %}
+                <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" width="120">
+            {% else %}
+                <div class="avatar" style="background-color:#{{ user.avatar_color }}">
+                    {{ user.nombre|first|upper }}
+                </div>
+            {% endif %}
+
+            <ul>
+                <li><b>Correo:</b> {{ user.email }}</li>
+                <li><b>Teléfono:</b> {{ user.telefono }}</li>
+            </ul>
+
+            <a href="{% url 'usuarios:profile_edit' %}">Editar perfil</a>
+            <button onclick="window.close();" type="button">Cerrar ventana</button>
+        </div>
     </div>
-{% endif %}
-
-<ul>
-    <li><b>Correo:</b> {{ user.email }}</li>
-    <li><b>Teléfono:</b> {{ user.telefono }}</li>
-</ul>
-
-<a href="{% url 'usuarios:profile_edit' %}">Editar perfil</a>
-<br>
-<button onclick="window.close();" type="button">Ir a la página principal</button>
+</body>
+</html>
 {% endblock %}

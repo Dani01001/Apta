@@ -14,12 +14,12 @@
     <main>
         <div class="container_prin">
             <div class="img-zoom">
-                <img src="https://lh5.googleusercontent.com/p/AF1QipPOI9bYC1jebU9ryY3QXekaKQt2lWhLwBXLxI7U=w596-h298-k-no" alt="La Farola">
+                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/23/b9/43/52/caption.jpg?w=900&h=500&s=1" alt="Imagen del restaurante Tierra colorada">
             </div>
             <div class="informacion">
                 <h1>Tierra Colorada</h1>
-                <p>La Farola es un restaurante popular en Asunción, conocido por su ambiente acogedor y familiar. Su menú ofrece un buffet por kilo con una amplia variedad de platos locales e internacionales, incluyendo opciones de desayunos, almuerzos, postres y helados. Los viernes se destacan las parrilladas al aire libre, que atraen a muchos comensales. También ofrece servicios de almuerzos empresariales con pagos mensuales para empresas, brindando comodidad y calidad a sus clientes. <br><br>La Farola es reconocida por su limpieza, servicio confiable y ambiente agradable, lo que la convierte en una opción frecuente tanto para locales como para turistas. Su ubicación céntrica en la esquina de Constitución y Pettirossi facilita el acceso y la hace un punto habitual de encuentro para disfrutar de una buena comida en cualquier momento del día.<br><br> Recientemente, el restaurante ha sido destacado en guías gastronómicas locales por su autenticidad y calidad, consolidándose como un referente de la gastronomía en Asunción.</p>
-                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=2')">Reservar Mesa</button>
+                <p>Tierra Colorada es un restaurante que ofrece cocina paraguaya contemporánea y de vanguardia, liderado por el chef Rodolfo Angenscheidt, que utiliza productos locales y la mandioca como ingrediente clave, creando platos elaborados con emoción y alta calidad en un ambiente exclusivo y cálido. El restaurante, reconocido internacionalmente y el primero de Paraguay en el ranking Latin America's 50 Best Restaurants, combina ingredientes tradicionales con técnicas modernas para ofrecer una experiencia culinaria única.</p>
+                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=5')">Reservar Mesa</button>
             </div>
             <div class="container_sections">
                 <div class="box">
@@ -90,7 +90,7 @@
                     </section>
                     <section class="detalles animation">
                         <h1>Detalles</h1>
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.3624417028036!2d-57.62555269999999!3d-25.292024099999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da7e14a009ccf%3A0x1162f1f7b715df10!2sLa%20Farola%20Restaurante!5e0!3m2!1sen!2spy!4v1756608202716!5m2!1sen!2spy" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.919223103937!2d-57.55766709999999!3d-25.273302599999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da606930eff1d%3A0xcbde9650dc2c96e4!2sTierra%20Colorada%20Gastro!5e0!3m2!1sen!2spy!4v1759797512975!5m2!1sen!2spy" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         <div class="detalles-columnas">
                             <section class="detalle-1">
                                 <div class="detalle-item">
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="txt-detalles">
                                         <span>Ubicación</span>
-                                        <a href="https://maps.app.goo.gl/6QBd4eKx4HRqQTHV7" target="_blank" rel="noopener">Constitución 777 esq. Pettirossi, Asunción 001101</a>
+                                        <a href="https://maps.app.goo.gl/hTvaL77wjNvjNEry6" target="_blank" rel="noopener">Av. Santísima Trinidad, Asunción 001525</a>
                                     </div>
                                 </div>
                                 <div class="detalle-item">
@@ -135,7 +135,7 @@
                                     </div>
                                     <div class="txt-detalles">
                                         <span>Sitio web</span>
-                                        <a href="https://www.instagram.com/lafarolarestaurantepy/" target="_blank" rel="noopener">La Farola (ig)</a>
+                                        <a href="http://tierracoloradagastro.com" target="_blank" rel="noopener">Tierra colorada</a>
                                     </div>
                                 </div>
                                 <div class="detalle-item">
@@ -210,7 +210,7 @@
                 </div>
             </div>
         </div>
-        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=2')">
+        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=5')">
             <span class="short">R</span>
             <span class="long"><b>Mesas Disponibles</b><br>Reserva!!</span>
         </div>
@@ -220,7 +220,7 @@
 
     <script>
         window.SERVER_HOST = "{{ SERVER_HOST }}";
-        const restaurante_id = 2;
+        const restaurante_id = 5;
     </script>
     <script src="{% static 'JS/script.js' %}"></script>
 </body>

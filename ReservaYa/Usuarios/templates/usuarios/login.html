@@ -29,13 +29,12 @@
 
             <div class="container-otros">
                 <a href="{% provider_login_url 'google' %}" class="google-login-btn">
-                    <img src="https://i.blogs.es/dc6737/unnamed/650_1200.png" alt="google icon" style=" width:50px; height:auto;">
+                    <img src="https://i.blogs.es/dc6737/unnamed/650_1200.png" alt="google icon">
                     Iniciar con Google
                 </a>
             </div>
+            <a href="{% url 'usuarios:signup' %}" class="link-signup" style=" margin-left:22.5%; margin-top:25px; ">¿No tienes cuenta? Regístrate aquí</a>
         </form>
-
-        <a href="{% url 'usuarios:signup' %}" class="link-signup">¿No tienes cuenta? Regístrate aquí</a>
     </div>
 
     <script src="{% static 'JS/login.js' %}"></script>

@@ -93,3 +93,16 @@ def dashboard(request):
 @restaurant_admin_required
 def panel_restaurante(request):
     return render(request, "usuarios/dashboard_restaurante.html")
+
+
+def quienes_somos(request):
+    return render(request, "quienes_somos.html")
+
+def terminos(request):
+    return render(request, "terminos.html")
+
+def privacidad(request):
+    return render(request, "privacidad.html")
+
+def contacto(request):
+    return render(request, "contacto.html")

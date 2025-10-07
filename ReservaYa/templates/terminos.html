@@ -1,0 +1,338 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'img/apta_logo.png' %}" type="image/x-icon">
+    <title>Términos y Condiciones — ReservaYa (Apta)</title>
+    <meta name="description" content="Términos y condiciones del servicio ReservaYa, desarrollado por Apta. Políticas de uso, privacidad, cancelaciones y responsabilidades.">
+<style>
+  :root{
+    --bg:#1a0d0d; /* fondo rojizo oscuro */
+    --card:#240f10; /* paneles y tarjetas */
+    --muted:#d6b3b3; /* texto apagado rosado */
+    --accent:#c0392b; /* rojo principal */
+    --accent-2:#e74c3c; /* rojo claro */
+    --glass: rgba(255,255,255,0.03);
+    --maxw:1000px;
+    --radius:12px;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  *{box-sizing:border-box}
+
+  html,body{
+    height:100%;
+    margin:0;
+    background:linear-gradient(180deg,#120505 0%, #1a0b0b 100%);
+    color:#f5eaea;
+  }
+
+  a{
+    color:var(--accent-2);
+    transition:color 0.2s ease;
+  }
+  a:hover{color:#ff6f61;}
+
+  header{
+    background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:36px auto;
+    padding:28px;
+    border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow:0 6px 30px rgba(192,57,43,0.35);
+  }
+
+  .brand{display:flex;gap:16px;align-items:center}
+  .logo{width:56px;height:56px;border-radius:10px;overflow:hidden;background:var(--glass);display:flex;align-items:center;justify-content:center}
+  .logo img{width:48px;height:auto}
+  h1{font-size:20px;margin:0;color:var(--accent-2)}
+  .lead{color:var(--muted);margin-top:6px;font-size:13px}
+
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+  .toc a{
+    background:rgba(255,255,255,0.02);
+    padding:8px 12px;
+    border-radius:8px;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:13px;
+    border:1px solid rgba(255,255,255,0.02);
+  }
+  .toc a:hover{
+    color:var(--accent-2);
+    background:rgba(231,76,60,0.08);
+  }
+
+  main{display:grid;grid-template-columns:1fr 320px;gap:24px}
+  .content{
+    padding:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:10px;
+  }
+  .sidebar{
+    position:sticky;
+    top:24px;
+    height:max-content;
+    padding:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:10px;
+  }
+
+  h2{margin-top:0;color:var(--accent)}
+  h3{margin-bottom:6px;color:var(--accent-2)}
+  p{color:var(--muted);line-height:1.6;margin:0 0 12px 0}
+
+  .section{
+    padding:14px 0;
+    border-bottom:1px dashed rgba(255,255,255,0.05);
+  }
+
+  .muted{color:var(--muted);font-size:13px}
+
+  /* Accordion */
+  .accordion-item{border-radius:8px;overflow:hidden;margin-bottom:8px}
+  .accordion-btn{
+    width:100%;
+    text-align:left;
+    padding:12px;
+    border:none;
+    background:rgba(255,255,255,0.02);
+    cursor:pointer;
+    font-weight:600;
+    color:#f5eaea;
+    border-radius:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:background 0.2s ease;
+  }
+  .accordion-btn:hover{background:rgba(231,76,60,0.12);}
+  .accordion-btn:focus{outline:2px solid rgba(231,76,60,0.25)}
+  .accordion-content{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .28s ease;
+    padding:0 12px;
+  }
+  .accordion-content p{margin:12px 0}
+
+  footer{
+    margin-top:20px;
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+  }
+
+  /* Responsive */
+  @media (max-width:900px){
+    main{grid-template-columns:1fr}
+    .sidebar{order:2}
+    .wrap{margin:18px}
+  }
+
+  /* Utility */
+  .btn{
+    display:inline-block;
+    padding:8px 12px;
+    border-radius:8px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#fff;
+    font-weight:700;
+    text-decoration:none;
+    transition:opacity 0.2s ease;
+  }
+  .btn:hover{opacity:0.85;}
+  .small{font-size:13px}
+  .note{
+    background:rgba(255,255,255,0.02);
+    padding:10px;
+    border-radius:8px;
+    border-left:4px solid var(--accent);
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo">
+          <img src="{% static 'img/apta_logo.png' %}" alt="Apta | ReservaYa" onerror="this.style.opacity=.6; this.alt='Apta'">
+        </div>
+        <div>
+          <h1>Términos y Condiciones — ReservaYa</h1>
+          <div class="lead">Documento legal que regula el uso de la plataforma ReservaYa, propiedad de Apta.</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap" style="margin-top:12px;">
+    <div class="toc">
+      <a href="#aceptacion">Aceptación</a>
+      <a href="#servicio">Servicio</a>
+      <a href="#usuarios">Usuarios</a>
+      <a href="#cancelaciones">Cancelaciones</a>
+      <a href="#privacidad">Privacidad</a>
+      <a href="#responsabilidad">Responsabilidad</a>
+      <a href="#modificaciones">Cambios</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+
+    <main>
+      <section class="content" aria-labelledby="term-titulo">
+        <h2 id="term-titulo">Términos y Condiciones de Uso</h2>
+
+        <div class="section" id="aceptacion">
+          <h3>Aceptación de los Términos</h3>
+          <p>Al acceder y utilizar la plataforma <strong>ReservaYa</strong> (en adelante, "la Plataforma"), usted acepta estar sujeto a estos Términos y Condiciones, así como a la <a href="#privacidad">Política de Privacidad</a> y a cualquier normativa adicional publicada por Apta. Si no está de acuerdo, no utilice la Plataforma.</p>
+        </div>
+
+        <div class="section" id="servicio">
+          <h3>Descripción del Servicio</h3>
+          <p>ReservaYa facilita la conexión entre usuarios y proveedores de servicios para la gestión y administración de reservas. Apta actúa como desarrollador y mantenedor de la Plataforma; la prestación final del servicio será responsabilidad del proveedor correspondiente.</p>
+        </div>
+
+        <div class="section" id="usuarios">
+          <h3>Registro y Obligaciones del Usuario</h3>
+          <p>Para utilizar ciertas funciones de la Plataforma, deberá crear una cuenta y proporcionar información veraz y actualizada. Usted es responsable de mantener la confidencialidad de sus credenciales y de todas las actividades realizadas con su cuenta.</p>
+          <p class="note small">Prohibido: crear cuentas falsas, usar la plataforma para actividades ilícitas o violar derechos de terceros.</p>
+        </div>
+
+        <div class="section" id="pagos">
+          <h3>Pagos y Facturación</h3>
+          <p>Los pagos realizados a través de la Plataforma son procesados por terceros proveedores de pago (pasarelas). Apta no es responsable por errores de procesamiento externos, pero colaborará en la resolución de incidencias en la medida de lo posible.</p>
+        </div>
+
+        <div class="section" id="cancelaciones">
+          <h3>Cancelaciones y Reembolsos</h3>
+          <p>Las políticas de cancelación y reembolso pueden variar según el proveedor del servicio. La Plataforma mostrará las condiciones aplicables antes de confirmar una reserva. En caso de disputa, se aplicarán las políticas publicadas para esa reserva específica.</p>
+        </div>
+
+        <div class="section" id="privacidad">
+          <h3>Privacidad y Protección de Datos</h3>
+          <p>Apta recopila y procesa datos personales conforme a su <a href="#">Política de Privacidad</a>. Nos comprometemos a adoptar medidas razonables de seguridad para proteger la información de usuarios. Para solicitudes de eliminación o acceso a datos, contacte al equipo de privacidad.</p>
+        </div>
+
+        <div class="section" id="propiedad">
+          <h3>Propiedad Intelectual</h3>
+          <p>Todo el contenido y la interfaz de la Plataforma, incluyendo marcas, logotipos, textos y código, son propiedad de Apta o de terceros licenciantes y están protegidos por la legislación vigente. Queda prohibida la reproducción no autorizada.</p>
+        </div>
+
+        <div class="section" id="responsabilidad">
+          <h3>Limitación de Responsabilidad</h3>
+          <p>La Plataforma se ofrece "tal cual". Apta no garantiza la continuidad ininterrumpida ni la ausencia de errores. En la medida permitida por la ley, Apta no será responsable por daños indirectos, lucro cesante o pérdidas de datos derivados del uso de la Plataforma.</p>
+        </div>
+
+        <div class="section" id="seguridad">
+          <h3>Seguridad</h3>
+          <p>Implementamos medidas técnicas y organizativas apropiadas para proteger la seguridad de la Plataforma. Sin embargo, ningún sistema es infalible; recomendamos mantener contraseñas seguras y actualizar sus datos de contacto.</p>
+        </div>
+
+        <div class="section" id="modificaciones">
+          <h3>Modificaciones del Servicio y Términos</h3>
+          <p>Apta puede modificar estos Términos o la funcionalidad de la Plataforma. Las actualizaciones serán publicadas en este documento y, cuando proceda, notificadas a los usuarios. El uso continuado tras cambios constituye aceptación de los mismos.</p>
+        </div>
+
+        <div class="section" id="terminacion">
+          <h3>Suspensión y Terminación</h3>
+          <p>Apta se reserva el derecho de suspender o cancelar el acceso de cualquier usuario que infrinja estos Términos, o cuando así sea exigido por la ley o por razones de seguridad.</p>
+        </div>
+
+        <div class="section" id="ley">
+          <h3>Legislación Aplicable</h3>
+          <p>Estos Términos se regirán por las leyes del país donde Apta tenga su sede legal. Para controversias, las partes intentarán resolver de forma amistosa y, en su defecto, se someterán a los tribunales competentes.</p>
+        </div>
+
+        <div class="section" id="contacto">
+          <h3>Contacto</h3>
+          <p>Para consultas legales, privacidad o soporte: <strong>reservaya@gmail.com</strong>. También puede usar el formulario de contacto disponible en la Plataforma.</p>
+        </div>
+
+        <footer>
+          <div class="muted">Última actualización: <span id="fecha-actual"></span></div>
+        </footer>
+      </section>
+
+      <aside class="sidebar" aria-label="Navegación rápida">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div>
+            <strong>Apta</strong>
+            <div class="small muted">ReservaYa — Plataforma de reservas</div>
+          </div>
+          <a class="btn" href="#contacto">Contactar</a>
+        </div>
+
+        <div style="margin-top:8px">
+          <div class="muted small" style="margin-bottom:6px">Secciones rápidas</div>
+          <div class="accordion-item">
+            <button class="accordion-btn" aria-expanded="false" data-target="acc-uso">Uso de la Plataforma <span class="muted">▾</span></button>
+            <div class="accordion-content" id="acc-uso">
+              <p class="small muted">Registro, reservas, pagos y obligaciones generales.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-btn" aria-expanded="false" data-target="acc-priv">Privacidad <span class="muted">▾</span></button>
+            <div class="accordion-content" id="acc-priv">
+              <p class="small muted">Cómo tratamos sus datos, cookies y derechos.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-btn" aria-expanded="false" data-target="acc-conduct">Conducta <span class="muted">▾</span></button>
+            <div class="accordion-content" id="acc-conduct">
+              <p class="small muted">Normas de comportamiento y sanciones por incumplimiento.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="muted small">Descargar</div>
+          <a class="btn" id="download-pdf" href="#" onclick="window.print();return false;">Imprimir / Guardar PDF</a>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // Rellena la fecha de última actualización
+    document.getElementById('fecha-actual').textContent = new Date().toLocaleDateString('es-ES');
+
+    // Accordion simple
+    document.querySelectorAll('.accordion-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const panel = document.getElementById(targetId);
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        if(!expanded){
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+        } else {
+          panel.style.maxHeight = null;
+        }
+      });
+    });
+
+    // Smooth anchor scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if(href.length>1){
+          e.preventDefault();
+          const el = document.querySelector(href);
+          if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

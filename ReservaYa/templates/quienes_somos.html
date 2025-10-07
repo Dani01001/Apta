@@ -1,30 +1,126 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'CSS/quienes_somos.css' %}">
-    <link rel="icon" href="{% static 'IMG/logo 2.png' %}" type="image/x-icon">
-    <title>Document</title>
+    <title>Quiénes Somos - Apta | ReservaYa</title>
+    <link rel="icon" href="{% static 'IMG/apta_logo.png' %}" type="image/x-icon">
+    <style>
+        :root{
+            --bg:#1a0d0d;
+            --card:#240f10;
+            --muted:#d6b3b3;
+            --accent:#c0392b;
+            --accent-2:#e74c3c;
+            --glass: rgba(255,255,255,0.03);
+            --radius:12px;
+            --maxw:1100px;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        *{box-sizing:border-box; margin:0; padding:0;}
+        body{background:var(--bg); color:var(--muted); line-height:1.6;}
+        a{color:var(--accent-2); text-decoration:none;}
+        a:hover{color:#ff6f61;}
+        h1, h2, h3{color:var(--accent-2);}
+        h1.titulo_1{font-size:2.5rem; text-align:center; margin:30px 0;}
+        h1.titulo{font-size:1.8rem; margin-top:30px; border-left:5px solid var(--accent); padding-left:10px;}
+
+        .container_info{
+            max-width:var(--maxw);
+            margin:40px auto;
+            padding:30px;
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:0 6px 20px rgba(192,57,43,0.35);
+        }
+
+        .info p{margin-bottom:16px; color:var(--muted);}
+        .valores-lista li{margin-bottom:10px;}
+
+        .equipo-container{
+            max-width:var(--maxw);
+            margin:40px auto;
+            padding:30px;
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:0 6px 20px rgba(192,57,43,0.25);
+        }
+
+        .equipo-lista{display:flex; gap:20px; flex-wrap:wrap; list-style:none;}
+        .equipo-lista .izquierda, .equipo-lista .derecha{flex:1;}
+        .miembro{margin-bottom:20px; background:rgba(255,255,255,0.02); padding:15px; border-radius:var(--radius);}
+        .miembro .nombre{color:var(--accent);}
+
+        /* Responsive */
+        @media(max-width:900px){
+            .equipo-lista{flex-direction:column;}
+        }
+    </style>
 </head>
 <body>
-    <h1 class="titulo">¿Quiénes somos?</h1>
+    <div class="container_info">
+        <h1 class="titulo_1">¿Quiénes somos?</h1>
+        <div class="info">
+            <p>En Apta, creemos que la tecnología no solo debe simplificar la vida, sino también optimizar el tiempo y la eficiencia. Somos una empresa dedicada al desarrollo de soluciones digitales inteligentes, y nuestro proyecto ReservaYa nace con la misión de revolucionar la forma en que las personas gestionan sus reservas, servicios y experiencias.</p>
+            <p>Nuestra visión es clara: crear plataformas ágiles, seguras y accesibles que conecten a usuarios y negocios de manera directa, sin complicaciones. En un mundo donde cada segundo cuenta, nosotros nos encargamos de que reservar, coordinar o gestionar una cita sea cuestión de pocos clics.</p>
+            <p>Conformamos un equipo multidisciplinario de desarrolladores, diseñadores y estrategas digitales que trabajan bajo un mismo principio: la excelencia operativa. Apostamos por la innovación constante, la mejora continua y la experiencia de usuario como eje de cada decisión.</p>
+        </div>
+
+        <h1 class="titulo">Nuestra Misión</h1>
+        <div class="info">
+            <p>Facilitar la digitalización de negocios y la gestión de reservas mediante herramientas tecnológicas confiables, intuitivas y eficientes.</p>
+        </div>
+
+        <h1 class="titulo">Nuestra Visión</h1>
+        <div class="info">
+            <p>Ser una empresa referente en soluciones tecnológicas personalizadas en Latinoamérica, destacándonos por la calidad, seguridad y agilidad de nuestras plataformas.</p>
+        </div>
+
+        <h1 class="titulo">Nuestros Valores</h1>
+        <div class="info">
+            <ul class="valores-lista">
+                <li><strong>Innovación:</strong> buscamos nuevas formas de resolver los desafíos digitales.</li>
+                <li><strong>Compromiso:</strong> acompañamos a nuestros clientes en cada paso.</li>
+                <li><strong>Transparencia:</strong> actuamos con ética y responsabilidad.</li>
+                <li><strong>Calidad:</strong> cada línea de código, cada diseño y cada experiencia cuentan.</li>
+                <li><strong>Eficiencia:</strong> reducimos procesos complejos a soluciones simples.</li>
+            </ul>
+        </div>
+
+        <h1 class="titulo">Qué hacemos</h1>
+        <div class="info">
+            <p>Desarrollamos sistemas web adaptados a las necesidades del mercado, especializados en gestión de reservas, administración de clientes y automatización de procesos.</p>
+            <p>Con ReservaYa, ofrecemos a empresas y usuarios una plataforma rápida, moderna y confiable, pensada para todo tipo de servicios: desde salones de belleza y gimnasios, hasta consultorios, talleres y restaurantes.</p>
+        </div>
+
+        <h1 class="titulo">Por qué elegirnos</h1>
+        <div class="info">
+            <p>Porque entendemos el equilibrio entre tecnología y estrategia. No solo creamos software: creamos soluciones que impulsan resultados.</p>
+            <p>Nuestra meta no es solo que las empresas usen nuestras herramientas, sino que crezcan con ellas.</p>
+        </div>
+    </div>
+
     <div class="equipo-container">
-        <h2 class="subtitulo">Nuestro equipo</h2>
+        <h1 class="titulo">Nuestro equipo</h1>
         <ul class="equipo-lista">
-            <li class="miembro">
-                <strong class="nombre">Toshi Pedrozo</strong>: Encargado principal del desarrollo del frontend de la página, responsable de diseñar y construir la interfaz de usuario, asegurando una experiencia visual atractiva, intuitiva y funcional para todos los visitantes. Su dedicación se refleja en cada detalle visual y en la usabilidad del sitio.
-            </li>
-            <li class="miembro">
-                <strong class="nombre">Jesús Amarilla</strong>: Especialista en el apoyo al desarrollo del frontend y colaborador clave en diversas áreas del backend. Su versatilidad y conocimientos técnicos permiten integrar funcionalidades complejas y mantener una comunicación fluida entre el diseño y la lógica del sistema.
-            </li>
-            <li class="miembro">
-                <strong class="nombre">Rodrigo Aveiro</strong>: Responsable del backend, encargado de la arquitectura, desarrollo y mantenimiento de la lógica interna de la aplicación. Garantiza la seguridad, eficiencia y escalabilidad del sistema, asegurando que todos los procesos funcionen correctamente detrás de escena.
-            </li>
-            <li class="miembro">
-                <strong class="nombre">Tobias Mendieta</strong>: Encargado de la documentación y soporte constante al equipo. Se ocupa de crear y mantener la documentación técnica y de usuario, facilitando la comprensión y el uso del sistema, además de brindar ayuda continua para resolver dudas y mejorar los procesos internos.
-            </li>
+            <div class="izquierda">
+                <li class="miembro">
+                    <strong class="nombre">Toshi Pedrozo</strong>: Encargado principal del desarrollo del frontend de la página, responsable de diseñar y construir la interfaz de usuario, asegurando una experiencia visual atractiva, intuitiva y funcional para todos los visitantes. Su dedicación se refleja en cada detalle visual y en la usabilidad del sitio.
+                </li>
+                <li class="miembro">
+                    <strong class="nombre">Jesús Amarilla</strong>: Especialista en el apoyo al desarrollo del frontend y colaborador clave en diversas áreas del backend. Su versatilidad y conocimientos técnicos permiten integrar funcionalidades complejas y mantener una comunicación fluida entre el diseño y la lógica del sistema.
+                </li>
+            </div>
+            <div class="derecha">
+                <li class="miembro">
+                    <strong class="nombre">Rodrigo Aveiro</strong>: Responsable del backend, encargado de la arquitectura, desarrollo y mantenimiento de la lógica interna de la aplicación. Garantiza la seguridad, eficiencia y escalabilidad del sistema, asegurando que todos los procesos funcionen correctamente detrás de escena.
+                </li>
+                <li class="miembro">
+                    <strong class="nombre">Tobias Mendieta</strong>: Encargado de la documentación y soporte constante al equipo. Se ocupa de crear y mantener la documentación técnica y de usuario, facilitando la comprensión y el uso del sistema, además de brindar ayuda continua para resolver dudas y mejorar los procesos internos.
+                </li>
+            </div>
         </ul>
     </div>
 </body>

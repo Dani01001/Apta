@@ -5,11 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ReservaYa{% endblock %}</title>
+    <link rel="icon" href="{% static 'img/logo 2.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
     {% include "includes/navbar.html" %}
     {% block content %}{% endblock %}
+    <script>
+        const URL_REGISTRO = "{% url 'usuarios:signup' %}";
+        const URL_LOGIN = "{% url 'usuarios:login' %}";
+    </script>
     <script src="{% static 'js/home.js' %}" defer></script>
 </body>
 </html>

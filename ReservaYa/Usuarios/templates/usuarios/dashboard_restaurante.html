@@ -4,16 +4,99 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel de Restaurante</title>
-    <link rel="stylesheet" href="{% static 'CSS/estilos.css' %}">
+    <style>
+        :root {
+            --primary-color: #730707;
+            --secondary-color: #590202;
+            --accent-color: #BFBFBF;
+            --background-color: #F2F2F2;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container-panel {
+            width: 100%;
+            max-width: 480px;
+            background-color: #efefef;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 24px rgba(35,0,0,0.3);
+            text-align: center;
+            margin-top: 25%;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2px 0;
+        }
+
+        ul li {
+            margin-bottom: 12px;
+        }
+
+        a, button {
+            display: block;
+            width: 95%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.05rem;
+            border: 1px solid var(--primary-color);
+            margin-top: 10px;
+            cursor: pointer;
+            transition: 0.4s ease;
+            text-align: center;
+            background-color: #ffffff6c;
+            color: #333;
+        }
+        button{
+            width:100.5%;
+        }
+        a:hover, button:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(77,5,5,0.18);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido {{ user.username }}</h1>
-    <p>Este es tu panel de administrador de restaurante.</p>
+    <div class="container-panel">
+        <h1>Bienvenido {{ user.username }}</h1>
+        <p>Este es tu panel de administrador de restaurante.</p>
 
-    <ul>
-        {% comment %} <li><a href="{% url 'restaurantes:gestionar_restaurante' %}">Gestionar restaurantes</a></li> {% endcomment %}
-        <li><a href="{% url 'reservas:api_mis_reservas' %}">Ver reservas recibidas</a></li>
-        <button onclick="window.close();" type="button">Ir a la página principal</button>
-    </ul>
+        <ul>
+            <li><a href="{% url 'restaurantes:gestionar_restaurante' %}">Gestionar restaurantes</a></li>
+            <li><a href="{% url 'reservas:api_mis_reservas' %}">Ver reservas recibidas</a></li>
+        </ul>
+        <button onclick="window.close();" type="button">Cerrar ventana</button>
+    </div>
 </body>
 </html>

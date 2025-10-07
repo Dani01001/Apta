@@ -68,7 +68,7 @@ def detalle_restaurante(request, slug):
     # Verificar si la plantilla existe
     if not os.path.exists(os.path.join(settings.TEMPLATES[0]['DIRS'][0], plantilla_ruta)):
         # Si no existe, puede cargar una plantilla genérica o mostrar 404
-        return render(request, 'restaurantes/no_disponible.html', {'restaurante': restaurante})
+        return render(request, 'no_disponible.html', {'restaurante': restaurante})
 
     context = {
         'restaurante': restaurante,

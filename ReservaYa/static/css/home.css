@@ -15,9 +15,9 @@ body{
 
 :root {
     --primary-color: #730707;
-    --secondary-color: #590202; 
+    --secondary-color: #590202;
     --accent-color: #BFBFBF;
-    --background-color: #F2F2F2; 
+    --background-color: #F2F2F2;
 }
 
 main{
@@ -29,8 +29,8 @@ header{
     background-repeat: no-repeat;  /* no repetir */
     background-size: cover;        /* que se adapte a todo el ancho/alto */
     background-position: center;   /* centrada */
-    /* width: 100%;
-    height: 100vh; */
+    width: 100%;
+    height: 100vh;
 
 }
 
@@ -99,15 +99,15 @@ header{
     justify-content: space-between; /* separa los dos bloques */
     align-items: center;
     padding: 0px 300px;
-    position: relative;   
+    position: relative;
     /* width: auto; */
     /* height: 200px; */
 }
 
 .mid{
     color: white;
-    display: block;  
-    justify-content: center; 
+    display: block;
+    justify-content: center;
     /* padding: 100px;     */
 }
 
@@ -186,11 +186,11 @@ a{
     height: 50px;
     border-radius: 10px;
     display: flex;
-    justify-content: center;        
+    justify-content: center;
     align-items: center;
     padding: 0;
 }
- 
+
 .boton_nav:hover{
     transition: 1s;
     background-color: var(--accent-color);
@@ -252,7 +252,7 @@ a{
     width: 100%;
     height: 100%;
     text-align: center;
-    line-height: 30px; 
+    line-height: 30px;
     color: #fff;
     text-decoration: none;
 }
@@ -264,7 +264,7 @@ a{
 .box {
     flex: 1;
     margin: 0 20% 0 20%;
-    box-sizing: border-box; 
+    box-sizing: border-box;
     border-right: none;
     display: block;
 }
@@ -277,7 +277,7 @@ a{
   position: relative;
   margin-top: 100px;
   margin-bottom: 100px;
-    
+
 }
 
 .menu-rest h1 {
@@ -294,14 +294,14 @@ a{
 
 .menu-wrapper {
   overflow: hidden; /* oculta los elementos fuera de vista */
-  width: 700px; 
+  width: 700px;
   margin: auto;
   padding-bottom:  5px;
 }
 
 .menu {
   display: flex;
-  transition: transform 0.5s ease; 
+  transition: transform 0.5s ease;
 }
 
 .card {
@@ -386,7 +386,7 @@ a{
     display: flex;
     gap: 50px;
     flex-wrap: wrap;
-    justify-content: center; 
+    justify-content: center;
     align-items: flex-start;
     padding: 20px;
     margin:  50px 0 50px 0px;
@@ -437,7 +437,7 @@ a{
     padding-top: 15px;
     margin: 0 auto;       /* centra horizontalmente */
     max-width: 800px;     /* ancho máximo opcional */
-    text-align: center; 
+    text-align: center;
 }
 
 .sucursal p {
@@ -523,7 +523,7 @@ a{
 .animation{
     view-timeline-name: --image;
     view-timeline-axis: block;
-    
+
     animation-timeline: --image;
     animation-name: show;
 

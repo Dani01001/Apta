@@ -18,7 +18,7 @@
             <div class="informacion">
                 <h1>San Miguel</h1>
                 <p>Este establecimiento se distingue por ser el restaurante más antiguo del Paraguay, fundado en 1886 y asentado en un edificio con valor patrimonial que conserva elementos originales de su época. Su menú mantiene la tradición de la cocina casera paraguaya con platos como la milanesa de lomito, el surubí, el caldo ava y el locro, junto con pastas artesanales y postres típicos como el dulce de mamón. En los últimos años también ha incorporado opciones más modernas como vinos de autor y un café anexo para desayunos y meriendas.<br><br> San Miguel es reconocido por su ambiente familiar y su atención cercana, lo que lo convierte en un punto de encuentro habitual para varias generaciones de asuncenos. Su ubicación en el barrio Las Mercedes y su capacidad para recibir a numerosos comensales refuerzan su papel como referente gastronómico de la ciudad.<br><br> Con más de un siglo de trayectoria ininterrumpida, San Miguel representa un legado vivo de la historia culinaria del Paraguay, manteniendo el equilibrio entre tradición, calidad y hospitalidad.</p>
-                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=4')">Reservar Mesa</button>
+                <button class="btn-reservar animation" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=3')">Reservar Mesa</button>
             </div>
             <div class="container_sections">
                 <div class="box">
@@ -210,7 +210,7 @@
                 </div>
             </div>
         </div>
-        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas" %}?restaurante=4')">
+        <div class="btn-reserva-float" onclick="abrirVentanaEmergente('{% url "reservas:reservas" %}?restaurante=3')">
             <span class="short">R</span>
             <span class="long"><b>Mesas Disponibles</b><br>Reserva!!</span>
         </div>
@@ -220,7 +220,7 @@
 
     <script>
         window.SERVER_HOST = "{{ SERVER_HOST }}";
-        const restaurante_id = 4;
+        const restaurante_id = 3;
     </script>
     <script src="{% static 'JS/script.js' %}"></script>
 </body>

@@ -35,12 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (registroItem) {
-        registroItem.addEventListener('click', () => abrirVentanaEmergente('/registro/'));
+        registroItem.addEventListener('click', () => abrirVentanaEmergente(URL_REGISTRO));
     }
-
+    
     if (loginItem) {
-        loginItem.addEventListener('click', () => abrirVentanaEmergente('/login/'));
+        loginItem.addEventListener('click', () => abrirVentanaEmergente(URL_LOGIN));
     }
+        
 });
 
 function abrirVentanaEmergente(url) {
