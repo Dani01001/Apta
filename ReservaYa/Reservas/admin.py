@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Reserva
+from import_export.admin import ImportExportActionModelAdmin
 
-admin.site.register(Reserva)
-# Register your models here.
+@admin.register(Reserva)
+class ReservaAdmin(ImportExportActionModelAdmin):
+    pass

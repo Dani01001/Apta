@@ -106,3 +106,6 @@ def privacidad(request):
 
 def contacto(request):
     return render(request, "contacto.html")
+
+def paginapriv(request):
+    return render(request, "usuarios/paginapriv.html")
