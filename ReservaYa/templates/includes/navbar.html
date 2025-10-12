@@ -16,11 +16,12 @@
                 </li>
 
                 {% if user.is_authenticated %}
-                    {% if not user.socialaccount_set.exists %}
+                    {% if user.is_authenticated and user.es_restaurante %}
                         <li class="boton_contacto">
-                            <a href="#">Restaurantes</a>
+                            <a href="{% url 'restaurantes:gestionar_restaurante' %}">Restaurantes</a>
                         </li>
                     {% endif %}
+                    
                     <li class="boton_nav">
                         <a href="{% url 'usuarios:logout' %}">Cerrar sesión</a>
                     </li>

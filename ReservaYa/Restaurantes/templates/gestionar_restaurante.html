@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/CSS/principal_priv.css">
+    <title>ReservaYa</title>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Restaurante</h2>
+        <a href="#" class="active"><i class="fa fa-calendar"></i> Reservas</a>
+        <a href="#"><i class="fa fa-utensils"></i> Menú</a>
+        <a href="#"><i class="fa fa-map-marker-alt"></i> Sucursales</a>
+        <div id="adminProfile" class="profile-btn">
+            <i class="fas fa-user-shield"></i>
+            <span class="profile-text" id="nombreUsuario">(not working)</span>
+        </div>
+    </div>
+
+    <div style="flex:1;">
+        <!-- Topbar -->
+        <div class="topbar">
+            <span>Bienvenido, Restaurante (---)</span>
+            <button class="btn" id="btnCerrarSesion">Cerrar sesión</button>
+        </div>
+
+        <main>
+            <div class="main">
+                <h1>Panel de Control</h1>
+
+                <!-- Card de Reservas -->
+                <div class="card">
+                    <h2>Reservas de Hoy</h2>
+                    <button class="btn" id="abrirModalGestion">Gestionar Reservas</button>
+                </div>
+
+                <!-- Card de Menú -->
+                <div class="card">
+                    <h2>Menú</h2>
+                    <p>Aquí iría la lista de platos.</p>
+                    <button id="addFileBtn" class="btn">Agregar archivo</button>
+                    <span id="file-name"></span>
+                    <input type="file" id="fileInput" style="display: none;" />
+                </div>
+
+                <!-- Card de Sucursales -->
+                <div class="card">
+                    <h1>Agregar Sucursales de Restaurantes</h1>
+                    <div class="map-search">
+                        <input id="place-input" type="text" placeholder="Buscar restaurante...">
+                        <button id="add-branch">Agregar Sucursal</button>
+                    </div>
+                    <div id="map"></div>
+                    <h2>Sucursales agregadas:</h2>
+                    <ul id="branch-list"></ul> 
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="integrantes">
+                &copy; 2025 ReservaYa | Contacto: info@reservaya.com
+            </div>
+            <div id="contacto"></div>
+        </footer>
+    </div>
+
+    <!-- Modal de Gestión de Reservas -->
+    <div id="modalGestion" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cerrarModalGestion">&times;</span>
+            <h2>Reservas de Hoy</h2>
+            <table id="tablaReservas">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Hora</th>
+                    <th>Acciones</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Ver Detalles -->
+    <div id="modalVer" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cerrarModalVer">&times;</span>
+            <h3>Datos del Cliente</h3>
+            <p><strong>Nombre:</strong> <span id="verNombre"></span></p>
+            <p><strong>Email:</strong> <span id="verEmail"></span></p>
+            <p><strong>Teléfono:</strong> <span id="verTelefono"></span></p>
+            <p><strong>Hora de Reserva:</strong> <span id="verHora"></span></p>
+        </div>
+    </div>
+
+        <!-- Modal Agregar Sucursal -->
+    <div id="modalSucursal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" id="cerrarModalSucursal">&times;</span>
+        <h3>Agregar Sucursal</h3>
+
+        <form id="formSucursal">
+            <div>
+                <label for="sucursalNombre">Nombre</label><br>
+                <input id="sucursalNombre" name="nombre" required />
+            </div>
+
+            <div>
+                <label for="sucursalDireccion">Dirección</label><br>
+                <input id="sucursalDireccion" name="direccion" required />
+            </div>
+
+            <div>
+                <label for="sucursalTelefono">Teléfono</label><br>
+                <input id="sucursalTelefono" name="telefono" />
+            </div>
+
+            <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+                <button type="button" id="btnGeocode">Buscar en mapa</button>
+                <small id="geoStatus" style="margin-left:8px;color:#666;"></small>
+            </div>
+
+            <!-- Campos lat/lng ocultos (llenados por geocoding o por el mapa si lo activás) -->
+            <input type="hidden" id="sucursalLat" name="lat" />
+            <input type="hidden" id="sucursalLng" name="lng" />
+
+            <div style="margin-top:12px;">
+                <button type="submit" class="btn">Guardar Sucursal</button>
+                <button type="button" id="cancelarSucursal" class="btn">Cancelar</button>
+            </div>
+        </form>
+
+        <!-- Opcional: contenedor para el mapa (si usas Leaflet) -->
+        <div id="mapSucursal" style="width:100%;height:300px;margin-top:12px;display:none;border-radius:8px;overflow:hidden;"></div>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../static/JS/maps.js" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&libraries=places&callback=initMap" async defer></script>
+    <script src="../static/JS/principal_priv.js" defer></script>
+    <script src="../static/JS/agregar-menu.js" defer></script>
+    <script src="../static/JS/script.js" defer></script>
+</body>
+</html>

@@ -147,7 +147,7 @@ def gestionar_restaurante(request):
     context = {
         'restaurante': restaurante,
     }
-    return render(request, 'restaurantes/gestionar_restaurante.html', context)
+    return render(request, 'gestionar_restaurante.html', context)
 
 # ... (dentro de views.py) ...
 
