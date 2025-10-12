@@ -10,11 +10,11 @@ urlpatterns = [
 
     path("perfil/", views.profile_view, name="profile"),
     path("perfil/editar/", views.profile_edit_view, name="profile_edit"),
-
+    path("pagina_priv/", views.paginapriv, name="pagina_priv"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("dashboard_restaurante/", views.panel_restaurante, name="dashboard_restaurante"),
     path("dashboard_usuario/", views.dashboard, name="dashboard_usuario"),
-
+    
     # Login con Google (django-allauth)
     path("accounts/", include("allauth.urls")),
 ]

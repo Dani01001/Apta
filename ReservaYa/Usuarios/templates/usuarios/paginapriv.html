@@ -1,0 +1,210 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'CSS/reservaya_rest.css' %}">
+    <title>ReservaYa - Panel de Administración</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>ReservaYa Rest</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active"><i>📊</i> Dashboard</a></li>
+                <li><a href="#"><i>📅</i> Reservas</a></li>
+                <li><a href="#"><i>🍽️</i> Mesas</a></li>
+                {% comment %} <li><a href="#"><i>🏢</i> Mi Restaurante</a></li> {% endcomment %}
+                <li><a href="#"><i>📈</i> Reportes</a></li>
+                {% comment %} <li><a href="#"><i>⚙️</i> Configuración</a></li>
+                <li><a href="#"><i>🚪</i> Cerrar Sesión</a></li> {% endcomment %}
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Panel de Administración</h2>
+                <div class="user-info" id="userSection">
+                    <div class="avatar">
+                        <a href="{% url 'usuario' %}" class="user-link">
+                            <div class="user-avatar" style="background-color: {{ user.username|random_color }}">
+                                {% if user.profile.image %}
+                                    <img src="{{ user.profile.image.url }}" alt="{{ user.username }}">
+                                {% else %}
+                                    {{ user.username|first|upper }}
+                                {% endif %}
+                            </div>
+                            <span class="user-name">{{ user.username }}</span>
+                        </a>
+                    </div>
+                    <button class="btn btn-secondary" id="backButton">← Volver</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card today">
+                    <h3>Reservas Hoy</h3>
+                    <div class="value" id="valorHoy">0</div>
+                    <p>+0 vs. ayer</p>
+                </div>
+                <div class="card pending">
+                    <h3>Pendientes</h3>
+                    <div class="value" id="valorPendientes">0</div>
+                    <p>Necesitan confirmación</p>
+                </div>
+                <div class="card confirmed">
+                    <h3>Confirmadas</h3>
+                    <div class="value" id="valorConfirmadas">0</div>
+                    <p>Para hoy</p>
+                </div>
+                <div class="card cancelled">
+                    <h3>Canceladas</h3>
+                    <div class="value" id="valorCanceladas">0</div>
+                    <p>Esta semana</p>
+                </div>
+            </div>
+
+            <!-- Reservas Recientes -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Reservas Recientes</h3>
+                    <button class="btn btn-primary" id="addReservationBtn">Nueva Reserva</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Personas</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaReservas">
+                        <!-- Filas dinámicas desde API -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Configuración de Mesas -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Configuración de Mesas</h3>
+                    <button class="btn btn-primary" id="addTableBtn">Agregar Mesa</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mesa #</th>
+                            <th>Capacidad</th>
+                            <th>Ubicación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaMesas">
+                        <!-- Filas dinámicas si quieres cargarlas desde JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Nueva Reserva -->
+    <div class="modal" id="reservationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nueva Reserva</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="reservationForm">
+                <div class="form-group">
+                    <label for="customerName">Nombre del Cliente</label>
+                    <input type="text" id="customerName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerEmail">Email</label>
+                    <input type="email" id="customerEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Teléfono</label>
+                    <input type="tel" id="customerPhone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="reservationDate">Fecha</label>
+                    <input type="date" id="reservationDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="reservationTime">Hora</label>
+                    <input type="time" id="reservationTime" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="numPeople">Número de Personas</label>
+                    <input type="number" id="numPeople" class="form-control" min="1" max="20" required>
+                </div>
+                <div class="form-group">
+                    <label for="tableSelect">Mesa</label>
+                    <select id="tableSelect" class="form-control" required>
+                        <option value="">Seleccione una mesa</option>
+                        <option value="1">Mesa 1 (4 personas)</option>
+                        <option value="2">Mesa 2 (2 personas)</option>
+                        <option value="3">Mesa 3 (6 personas)</option>
+                        <option value="4">Mesa 4 (8 personas)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="specialRequests">Notas Especiales</label>
+                    <textarea id="specialRequests" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Crear Reserva</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Agregar Mesa -->
+    <div class="modal" id="tableModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Nueva Mesa</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="tableForm">
+                <div class="form-group">
+                    <label for="mesaNumber">Número de Mesa</label>
+                    <input type="number" id="mesaNumber" class="form-control" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="tableCapacity">Capacidad</label>
+                    <input type="number" id="tableCapacity" class="form-control" min="1" max="20" required>
+                </div>
+                <div class="form-group">
+                    <label for="tableLocation">Ubicación</label>
+                    <select id="tableLocation" class="form-control" required>
+                        <option value="">Seleccione ubicación</option>
+                        <option value="interior">Interior</option>
+                        <option value="terraza">Terraza</option>
+                        <option value="privado">Área Privada</option>
+                        <option value="bar">Barra</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tableDescription">Descripción (opcional)</label>
+                    <textarea id="tableDescription" class="form-control" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Agregar Mesa</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static '' %}"></script>
+</body>
+</html>
