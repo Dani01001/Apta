@@ -11,9 +11,12 @@ from django.conf import settings
 from .models import Restaurante, Mesa, RestauranteAdmin
 import os
 
+from django.utils import timezone
 
 from Reservas.models import Reserva  # Importa el modelo Reserva
 from django.utils.dateparse import parse_date  # Importa parse_date
+
+
 
 
 # Configurar logger (opcional pero útil para debugging)
@@ -104,15 +107,12 @@ def panel_admin_restaurante(request):
     }
     return render(request, 'restaurantes/panel_admin.html', context)
 
-# ... (importaciones adicionales al inicio si es necesario) ...
-# from django import forms # Si usas formularios manuales
-# from .forms import RestauranteForm # Si creas un formulario específico
-
 @login_required
 @require_http_methods(["GET", "POST"])
 def gestionar_restaurante(request):
     """
-    Vista para que un RestauranteAdmin pueda editar la información de su restaurante.
+    Panel de administración de restaurante para el RestauranteAdmin.
+    Muestra reservas y mesas con contadores actualizados.
     """
     try:
         perfil_admin = RestauranteAdmin.objects.select_related('restaurante').get(usuario=request.user)
@@ -121,35 +121,72 @@ def gestionar_restaurante(request):
 
     restaurante = perfil_admin.restaurante
 
-    if request.method == 'POST':
-        # Procesar formulario de actualización
-        # Aquí asumimos una actualización directa, pero lo ideal sería usar un Form o ModelForm
-        restaurante.nombre = request.POST.get('nombre', restaurante.nombre)
-        restaurante.descripcion = request.POST.get('descripcion', restaurante.descripcion)
-        restaurante.direccion = request.POST.get('direccion', restaurante.direccion)
-        restaurante.telefono = request.POST.get('telefono', restaurante.telefono)
-        restaurante.email_contacto = request.POST.get('email_contacto', restaurante.email_contacto)
-        restaurante.sitio_web = request.POST.get('sitio_web', restaurante.sitio_web)
-        restaurante.horario_apertura = request.POST.get('horario_apertura', restaurante.horario_apertura)
-        restaurante.horario_cierre = request.POST.get('horario_cierre', restaurante.horario_cierre)
-        
-        # Manejo de archivos (imágenes) - requiere manejo especial en el formulario HTML
-        # if 'imagen_logo' in request.FILES:
-        #     restaurante.imagen_logo = request.FILES['imagen_logo']
-        # if 'imagen_portada' in request.FILES:
-        #     restaurante.imagen_portada = request.FILES['imagen_portada']
-
+    # Actualización de datos generales del restaurante
+    if request.method == "POST" and request.POST.get("accion") == "editar_restaurante":
+        restaurante.nombre = request.POST.get("nombre", restaurante.nombre)
+        restaurante.descripcion = request.POST.get("descripcion", restaurante.descripcion)
+        restaurante.direccion = request.POST.get("direccion", restaurante.direccion)
+        restaurante.telefono = request.POST.get("telefono", restaurante.telefono)
+        restaurante.email_contacto = request.POST.get("email_contacto", restaurante.email_contacto)
+        restaurante.sitio_web = request.POST.get("sitio_web", restaurante.sitio_web)
+        restaurante.horario_apertura = request.POST.get("horario_apertura", restaurante.horario_apertura)
+        restaurante.horario_cierre = request.POST.get("horario_cierre", restaurante.horario_cierre)
         restaurante.save()
-        # Redirigir o mostrar mensaje de éxito
-        return redirect('panel_admin_restaurante') # Asegúrate de que este nombre de URL exista
+        return redirect('gestionar_restaurante')
 
-    # Si es GET, mostrar el formulario con los datos actuales
+    # Todas las reservas del restaurante
+    reservas = Reserva.objects.filter(mesa__restaurante=restaurante).select_related('mesa', 'usuario').order_by('-fecha', 'hora')
+
+    # Contadores para el dashboard
+    hoy = timezone.localdate()
+    reservas_hoy = reservas.filter(fecha=hoy).count()
+    pendientes = reservas.filter(estado="Pendiente").count()
+    confirmadas = reservas.filter(estado="Confirmada").count()
+    canceladas = reservas.filter(estado="Cancelada").count()
+
+    # Mesas
+    mesas = Mesa.objects.filter(restaurante=restaurante).order_by('numero')
+
     context = {
         'restaurante': restaurante,
+        'perfil_admin': perfil_admin,
+        'reservas': reservas,
+        'mesas': mesas,
+        'reservas_hoy': reservas_hoy,
+        'pendientes': pendientes,
+        'confirmadas': confirmadas,
+        'canceladas': canceladas,
     }
     return render(request, 'gestionar_restaurante.html', context)
 
-# ... (dentro de views.py) ...
+@csrf_exempt
+@login_required
+@require_POST
+def actualizar_estado_reserva(request, reserva_id):
+    """
+    Cambia el estado de una reserva (Pendiente / Confirmada / Cancelada) vía AJAX.
+    """
+    try:
+        perfil_admin = RestauranteAdmin.objects.select_related('restaurante').get(usuario=request.user)
+        restaurante = perfil_admin.restaurante
+    except RestauranteAdmin.DoesNotExist:
+        return JsonResponse({'error': 'No tiene permisos para esta acción.'}, status=403)
+
+    try:
+        reserva = Reserva.objects.select_related('mesa__restaurante').get(
+            id=reserva_id, mesa__restaurante=restaurante
+        )
+    except Reserva.DoesNotExist:
+        return JsonResponse({'error': 'Reserva no encontrada o no pertenece a su restaurante.'}, status=404)
+
+    nuevo_estado = request.POST.get('estado')
+    if nuevo_estado not in ['Pendiente', 'Confirmada', 'Cancelada']:
+        return JsonResponse({'error': 'Estado inválido.'}, status=400)
+
+    reserva.estado = nuevo_estado
+    reserva.save()
+    return JsonResponse({'success': True, 'nuevo_estado': nuevo_estado})
+
 
 @login_required
 @require_http_methods(["GET", "POST"])

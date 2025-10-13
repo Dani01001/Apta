@@ -17,6 +17,7 @@ urlpatterns = [
     # Vista para eliminar una mesa (por ejemplo, para llamadas AJAX o formularios POST)
     path('admin/mesas/<int:mesa_id>/eliminar/', views.eliminar_mesa, name='eliminar_mesa'),
     path('admin/reservas/', views.ver_reservas_restaurante, name='ver_reservas_restaurante'),
+    path('admin/restaurante/actualizar_estado/<int:reserva_id>/', views.actualizar_estado_reserva, name='actualizar_estado_reserva')
 
     # === APIs (para integración con frontend o otras apps) ===
     # Ejemplo: Obtener mesas disponibles (puede ser consumida por JS o la app 'reservas')

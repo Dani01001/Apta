@@ -16,12 +16,11 @@
                 </li>
 
                 {% if user.is_authenticated %}
-                    {% if user.is_authenticated and user.es_restaurante %}
+                    {% if user.is_authenticated and user.role == 'restaurant_admin' %}
                         <li class="boton_contacto">
                             <a href="{% url 'restaurantes:gestionar_restaurante' %}">Restaurantes</a>
                         </li>
                     {% endif %}
-                    
                     <li class="boton_nav">
                         <a href="{% url 'usuarios:logout' %}">Cerrar sesión</a>
                     </li>
