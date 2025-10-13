@@ -10,13 +10,13 @@
         <!-- Links de navegación -->
         <ul class="nav-links">
             <li><a href="#contacto">Contacto</a></li>
-            {% comment %} <li><a href="{% url 'quienes_somos' %}">Quiénes somos</a></li> {% endcomment %}
+            <li><a href="{% url 'quienes_somos' %}">Quiénes somos</a></li>
 
             {% if user.is_authenticated %}
                 <!-- Usuario logueado -->
                 <li class="usuario-info">
                     <span class="nombre-usuario">{{ user.username }}</span>
-                    {% comment %} <a href="{% url 'usuario' %}" class="btn-perfil">Mi perfil</a> {% endcomment %}
+                    <a href="{% url 'usuarios:profile' %}" class="btn-perfil">Mi perfil</a>
                 </li>
             {% else %}
                 <!-- Usuario no logueado -->

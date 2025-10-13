@@ -25,7 +25,7 @@
                         <a href="{% url 'usuarios:logout' %}">Cerrar sesión</a>
                     </li>
                     <li class="boton_nav" id="userSection">
-                        <a href="#" class="user-link">
+                        <a href="{% url 'usuarios:profile' %}" class="user-link">
                             <span class="user-name">{{ user.username }}</span>
                         </a>
                     </li>

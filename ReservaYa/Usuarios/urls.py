@@ -14,6 +14,7 @@ urlpatterns = [
     path("dashboard/", views.dashboard, name="dashboard"),
     path("dashboard_restaurante/", views.panel_restaurante, name="dashboard_restaurante"),
     path("dashboard_usuario/", views.dashboard, name="dashboard_usuario"),
+    # path("perfil/reservas/", views.mis_reservas_view, name="mis_reservas"),
     
     # Login con Google (django-allauth)
     path("accounts/", include("allauth.urls")),

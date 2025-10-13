@@ -1,156 +1,246 @@
-{% block content %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Perfil - ReservaYa</title>
+    <title>Mi Perfil - ReservaYa</title>
     <style>
         :root {
             --primary-color: #730707;
             --secondary-color: #590202;
-            --accent-color: #BFBFBF;
+            --accent-color: #FF6B6B;
             --background-color: #F2F2F2;
         }
 
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             background-color: var(--background-color);
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+            padding: 0;
         }
 
-        .container-registro {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .registro {
-            width: 100%;
-            max-width: 420px;
-            background-color: #efefef;
+        .container-perfil {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 6px 24px rgba(35,0,0,0.3);
-            text-align: center;
-            animation: fadeIn 0.6s ease-out;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-        h2 {
-            font-size: 2rem;
+
+        .perfil-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
             margin-bottom: 20px;
-            color: var(--primary-color);
         }
 
-        img, .avatar {
-            border-radius: 50%;
-            margin: 15px 0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        img:hover, .avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(77,5,5,0.3);
+        .perfil-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .avatar {
-            width: 120px;
-            height: 120px;
-            line-height: 120px;
-            font-size: 3rem;
-            color: #fff;
-            margin: 15px auto;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--accent-color);
             display: flex;
-            justify-content: center;
             align-items: center;
-            cursor: default;
+            justify-content: center;
+            color: white;
+            font-size: 2.4rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-            font-size: 1.05rem;
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .perfil-datos h2 {
+            font-size: 1.6rem;
+            margin: 0 0 8px 0;
+            color: var(--primary-color);
+        }
+
+        .perfil-datos p {
+            margin: 4px 0;
+            font-size: 1rem;
+        }
+
+        .btn-editar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-editar:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.02);
+        }
+
+        .reservas-section {
+            margin-top: 40px;
+        }
+
+        .reservas-section h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 6px;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            border: 1px solid #ddd;
             text-align: left;
         }
 
-        ul li {
-            margin-bottom: 10px;
+        th {
+            background-color: var(--secondary-color);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
 
-        a, button {
-            display: block;
-            width: 94.5%;
-            padding: 12px;
-            border-radius: 8px;
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        tr:hover {
+            background-color: #ffecec;
+            transition: 0.3s;
+        }
+
+        .estado {
             font-weight: bold;
-            text-decoration: none;
-            font-size: 1.05rem;
-            border: 1px solid var(--primary-color);
-            margin-top: 10px;
-            cursor: pointer;
-            transition: 0.4s ease;
-        }
-        button{
-            width:101%;
-        }
-        a {
-            background-color: #ffffff6c;
-            color: #333;
+            padding: 5px 10px;
+            border-radius: 6px;
         }
 
-        a:hover {
-            background-color: var(--secondary-color);
-            color: #fff;
-            transform: scale(1.02);
-            box-shadow: 0 8px 24px rgba(77,5,5,0.18);
+        .estado.confirmada { background-color: #c2f0c2; color: #225c22; }
+        .estado.pendiente { background-color: #fff3cd; color: #856404; }
+        .estado.cancelada { background-color: #f8d7da; color: #721c24; }
+
+        .no-reservas {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            margin-top: 20px;
         }
 
-        button {
-            background-color: #ffffff6c;
-            color: #333;
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            color: #999;
+            font-size: 0.9rem;
         }
 
-        button:hover {
-            background-color: var(--secondary-color);
-            color: #fff;
-            transform: scale(1.02);
-            box-shadow: 0 8px 24px rgba(77,5,5,0.18);
-        }
+        @media (max-width: 768px) {
+            .perfil-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            .perfil-info {
+                flex-direction: column;
+            }
+
+            table th, table td {
+                font-size: 0.9rem;
+            }
+
+            .btn-editar {
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container-registro">
-        <div class="registro">
-            <h2>¡Registro exitoso, Bienvenido {{ user.nombre }}!</h2>
-                <p>Esta es tu foto de perfil.</p>
-            {% if user.foto_perfil %}
-                <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" width="120">
+    <div class="container-perfil">
+        <!-- Encabezado del perfil -->
+        <div class="perfil-header">
+            <div class="perfil-info">
+                {% if user.foto_perfil %}
+                    <div class="avatar">
+                        <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil">
+                    </div>
+                {% else %}
+                    <div class="avatar">{{ user.username|first|upper }}</div>
+                {% endif %}
+                <div class="perfil-datos">
+                    <h2>{{ user.username }}</h2>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ user.telefono|default:"No especificado" }}</p>
+                </div>
+            </div>
+            <a href="{% url 'usuarios:profile_edit' %}" class="btn-editar">Editar Perfil</a>
+        </div>
+
+        <!-- Sección de reservas -->
+        <div class="reservas-section">
+            <h3>Mis Reservas</h3>
+
+            {% if reservas %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Restaurante</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Mesa</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva in reservas %}
+                        <tr>
+                            <td>{{ reserva.restaurante.nombre }}</td>
+                            <td>{{ reserva.fecha }}</td>
+                            <td>{{ reserva.hora }}</td>
+                            <td>{{ reserva.mesa.numero|default:"-" }}</td>
+                            <td>
+                                <span class="estado {{ reserva.estado|lower }}">
+                                    {{ reserva.estado|capfirst }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
-                <div class="avatar" style="background-color:#{{ user.avatar_color }}">
-                    {{ user.nombre|first|upper }}
+                <div class="no-reservas">
+                    <p>No tienes reservas registradas todavía.</p>
                 </div>
             {% endif %}
-
-            <ul>
-                <li><b>Correo:</b> {{ user.email }}</li>
-                <li><b>Teléfono:</b> {{ user.telefono }}</li>
-            </ul>
-
-            <a href="{% url 'usuarios:profile_edit' %}">Editar perfil</a>
-            <button onclick="window.close();" type="button">Cerrar ventana</button>
         </div>
+
+        <footer>
+            © 2025 ReservaYa — Todos los derechos reservados
+        </footer>
     </div>
 </body>
 </html>
-{% endblock %}

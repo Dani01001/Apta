@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .decorators import restaurant_admin_required
 from Restaurantes.models import Restaurante
+from Reservas.models import Reserva  # asegúrese de tener este modelo
+
 
 Usuario = get_user_model()
 
@@ -45,7 +47,10 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, "usuarios/profile.html")
+    # Obtener las reservas del usuario actual
+    reservas = Reserva.objects.filter(usuario=request.user).order_by('-fecha')  # o '-fecha_reserva' según su modelo
+    return render(request, "usuarios/profile.html", {"reservas": reservas})
+
 
 @login_required
 def profile_edit_view(request):
