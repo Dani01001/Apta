@@ -92,8 +92,28 @@ estética minimalista y consistente.
 
 ## Despliegue
 
-El frontend está pensado para desplegarse en **Vercel** (encaja de forma nativa). El backend
-Django, al depender de una base de datos con estado, funciona mejor en un servicio como
-**Render** o **Railway** (free tier) que en Vercel, cuyo runtime serverless no persiste bien
-SQLite. Ver `backend/.env.example` para las variables de entorno que hay que configurar en
-producción (`SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `DATABASE_URL`).
+### Frontend — Vercel
+
+Desplegado en `https://reservaya-umber.vercel.app`. El proyecto está conectado al repositorio
+de GitHub, por lo que cada push a `main` genera un nuevo despliegue automáticamente.
+
+### Backend — Render
+
+El backend Django, al depender de una base de datos con estado, no encaja bien en el runtime
+serverless de Vercel (no persiste SQLite entre invocaciones). Se despliega en **Render** usando
+el archivo `render.yaml` de la raíz del repositorio (Blueprint):
+
+1. Crear una cuenta en [render.com](https://render.com) (gratis, se puede usar GitHub para
+   entrar).
+2. En el dashboard: **New +** → **Blueprint** → seleccionar el repositorio `Dani01001/Apta`.
+   Render detecta `render.yaml` y crea automáticamente el servicio web y la base de datos
+   Postgres gratuita.
+3. Una vez desplegado, abrir la pestaña **Shell** del servicio y correr una sola vez:
+   `python manage.py seed_data` (carga los restaurantes reales y los datos de demo).
+4. Copiar la URL pública que asigna Render (algo como `https://reservaya-api.onrender.com`) y
+   actualizar la variable `NEXT_PUBLIC_API_URL` del proyecto en Vercel con
+   `https://<esa-url>/api`, luego volver a desplegar el frontend.
+
+Ver `backend/.env.example` para el resto de variables de entorno de producción
+(`SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `DATABASE_URL`), todas ya
+precompletadas en `render.yaml`.
