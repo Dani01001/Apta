@@ -230,7 +230,14 @@ class Command(BaseCommand):
 
         restaurantes = self._crear_restaurantes()
         usuarios = self._crear_usuarios()
-        self._crear_reservas(usuarios, restaurantes)
+
+        if options["reset"] or not Reserva.objects.exists():
+            self._crear_reservas(usuarios, restaurantes)
+        else:
+            self.stdout.write(
+                "Ya existen reservas: se omite la siembra de reservas para no pisar datos reales "
+                "(usa --reset si querés forzarla)."
+            )
 
         self.stdout.write(self.style.SUCCESS("Datos cargados correctamente."))
         self.stdout.write("Usuario demo -> username: demo / password: Demo1234")
