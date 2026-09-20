@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { AuthProvider } from "@/lib/auth-context";
 import { AuthModalProvider } from "@/lib/auth-modal-context";
+import { SITE_URL } from "@/lib/site";
 
 import "./globals.css";
 
@@ -20,10 +21,44 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
+const TITULO = "ReservaYa — Reserva tu mesa favorita";
+const DESCRIPCION =
+  "Encuentra y reserva mesa en los mejores restaurantes de Asunción, Encarnación y Ciudad del Este. Un producto de Apta.";
+
 export const metadata: Metadata = {
-  title: "ReservaYa — Reserva tu mesa favorita",
-  description:
-    "Encuentra y reserva mesa en los mejores restaurantes de Paraguay. Un producto de Apta.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITULO,
+    template: "%s · ReservaYa",
+  },
+  description: DESCRIPCION,
+  keywords: [
+    "reservar restaurante Paraguay",
+    "reservas Asunción",
+    "restaurantes Encarnación",
+    "restaurantes Ciudad del Este",
+    "ReservaYa",
+    "Apta",
+  ],
+  authors: [{ name: "Apta" }],
+  openGraph: {
+    type: "website",
+    locale: "es_PY",
+    siteName: "ReservaYa",
+    title: TITULO,
+    description: DESCRIPCION,
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITULO,
+    description: DESCRIPCION,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#d6472a",
+  colorScheme: "light",
 };
 
 export default function RootLayout({

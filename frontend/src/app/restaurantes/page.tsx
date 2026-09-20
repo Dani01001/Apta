@@ -1,11 +1,37 @@
+import type { Metadata } from "next";
+
 import { FiltrosRestaurantes } from "@/components/FiltrosRestaurantes";
+import { Pagination } from "@/components/Pagination";
 import { RestaurantCard } from "@/components/RestaurantCard";
 import { apiFetch, buildQuery } from "@/lib/api";
 import { CIUDADES } from "@/lib/categorias";
 import type { Paginado, Restaurante } from "@/types";
 
+const PAGE_SIZE = 12;
+
 interface PageProps {
   searchParams: Promise<Record<string, string | undefined>>;
+}
+
+function filtrosDeParams(params: Record<string, string | undefined>) {
+  return {
+    categoria: params.categoria,
+    ciudad: params.ciudad,
+    rango_precio: params.rango_precio,
+    search: params.search,
+    page: params.page,
+  };
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const partes = [params.ciudad, params.categoria, params.search].filter(Boolean);
+  const titulo = partes.length ? `Restaurantes · ${partes.join(" · ")}` : "Restaurantes";
+  return {
+    title: titulo,
+    description:
+      "Filtra por categoría, ciudad o rango de precio y encuentra el restaurante perfecto en Paraguay.",
+  };
 }
 
 async function buscarRestaurantes(params: Record<string, string | undefined>) {
@@ -21,12 +47,10 @@ async function buscarRestaurantes(params: Record<string, string | undefined>) {
 
 export default async function RestaurantesPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const data = await buscarRestaurantes({
-    categoria: params.categoria,
-    ciudad: params.ciudad,
-    rango_precio: params.rango_precio,
-    search: params.search,
-  });
+  const filtros = filtrosDeParams(params);
+  const data = await buscarRestaurantes(filtros);
+  const paginaActual = Math.max(1, Number(params.page) || 1);
+  const totalPaginas = data ? Math.max(1, Math.ceil(data.count / PAGE_SIZE)) : 1;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
@@ -58,6 +82,7 @@ export default async function RestaurantesPage({ searchParams }: PageProps) {
                 <RestaurantCard key={restaurante.id} restaurante={restaurante} />
               ))}
             </div>
+            <Pagination paginaActual={paginaActual} totalPaginas={totalPaginas} params={filtros} />
           </>
         )}
       </div>
