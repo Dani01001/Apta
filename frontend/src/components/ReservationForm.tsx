@@ -16,19 +16,41 @@ function manana(): string {
   return fecha.toISOString().split("T")[0];
 }
 
+function horariosDisponibles(apertura: string, cierre: string): string[] {
+  const [horaInicio, minInicio] = apertura.split(":").map(Number);
+  const [horaFin, minFin] = cierre.split(":").map(Number);
+  const inicio = horaInicio * 60 + minInicio;
+  const fin = horaFin * 60 + minFin;
+  const horarios: string[] = [];
+  for (let minutos = inicio; minutos <= fin; minutos += 30) {
+    const h = String(Math.floor(minutos / 60)).padStart(2, "0");
+    const m = String(minutos % 60).padStart(2, "0");
+    horarios.push(`${h}:${m}`);
+  }
+  return horarios;
+}
+
 export function ReservationForm({
   restauranteId,
   restauranteNombre,
   capacidad,
+  horaApertura,
+  horaCierre,
 }: {
   restauranteId: number;
   restauranteNombre: string;
   capacidad: number;
+  horaApertura: string;
+  horaCierre: string;
 }) {
-  const { usuario, access } = useAuth();
+  const { usuario, access, logout } = useAuth();
   const { abrirLogin } = useAuthModal();
+  const horarios = horariosDisponibles(horaApertura, horaCierre);
+  const horaPorDefecto = horarios.includes("20:00")
+    ? "20:00"
+    : horarios[Math.floor(horarios.length / 2)];
   const [fecha, setFecha] = useState(manana());
-  const [hora, setHora] = useState("20:00");
+  const [hora, setHora] = useState(horaPorDefecto);
   const [personas, setPersonas] = useState(2);
   const [notas, setNotas] = useState("");
   const [enviando, setEnviando] = useState(false);
@@ -69,8 +91,14 @@ export function ReservationForm({
       });
       setExito(reserva);
     } catch (err) {
-      const detail = err instanceof ApiError ? err.detail : undefined;
-      setError(extraerMensajeError(detail, "No se pudo crear la reserva."));
+      if (err instanceof ApiError && err.status === 401) {
+        logout();
+        setError("Tu sesión expiró. Iniciá sesión de nuevo para confirmar la reserva.");
+        abrirLogin();
+      } else {
+        const detail = err instanceof ApiError ? err.detail : undefined;
+        setError(extraerMensajeError(detail, "No se pudo crear la reserva."));
+      }
     } finally {
       setEnviando(false);
     }
@@ -98,13 +126,18 @@ export function ReservationForm({
           </label>
           <label className="flex flex-col gap-1 text-sm">
             Hora
-            <input
-              type="time"
+            <select
               required
               value={hora}
               onChange={(e) => setHora(e.target.value)}
               className="rounded-lg border border-[var(--border-subtle)] bg-transparent px-3 py-2 outline-none focus:border-brand-400"
-            />
+            >
+              {horarios.map((h) => (
+                <option key={h} value={h}>
+                  {h}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
 

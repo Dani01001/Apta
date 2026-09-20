@@ -19,6 +19,9 @@ export function FiltrosRestaurantes({ ciudades }: { ciudades: string[] }) {
     } else {
       params.delete(clave);
     }
+    // Cualquier cambio de filtro vuelve a la primera página: los resultados
+    // cambian, así que la página en la que estabas ya no tiene sentido.
+    params.delete("page");
     router.push(`/restaurantes?${params.toString()}`);
   }
 

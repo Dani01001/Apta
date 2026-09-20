@@ -1,4 +1,5 @@
 import { Clock, MapPin, Phone, Star, Tag, Users } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -18,6 +19,31 @@ async function obtenerRestaurante(slug: string): Promise<Restaurante | null> {
     if (err instanceof ApiError && err.status === 404) return null;
     throw err;
   }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const restaurante = await obtenerRestaurante(slug);
+
+  if (!restaurante) {
+    return { title: "Restaurante no encontrado" };
+  }
+
+  const descripcion = `${restaurante.descripcion} Reservá mesa en ${restaurante.nombre}, ${restaurante.ciudad}.`;
+
+  return {
+    title: `${restaurante.nombre} — ${restaurante.ciudad}`,
+    description: descripcion,
+    openGraph: {
+      title: `${restaurante.nombre} · ReservaYa`,
+      description: descripcion,
+      images: [{ url: restaurante.imagen_url }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [restaurante.imagen_url],
+    },
+  };
 }
 
 export default async function RestauranteDetallePage({ params }: PageProps) {
@@ -98,6 +124,8 @@ export default async function RestauranteDetallePage({ params }: PageProps) {
             restauranteId={restaurante.id}
             restauranteNombre={restaurante.nombre}
             capacidad={restaurante.capacidad}
+            horaApertura={restaurante.hora_apertura}
+            horaCierre={restaurante.hora_cierre}
           />
         </div>
       </div>

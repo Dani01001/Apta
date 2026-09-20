@@ -1,4 +1,11 @@
 import { Code2, Handshake, Mail, MapPin, Sparkles, Target } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nosotros",
+  description:
+    "Conocé Apta, la empresa paraguaya de tecnología detrás de ReservaYa: nuestra misión, visión, valores y el equipo fundador.",
+};
 
 const EQUIPO = [
   {
