@@ -117,3 +117,9 @@ el archivo `render.yaml` de la raíz del repositorio (Blueprint):
 Ver `backend/.env.example` para el resto de variables de entorno de producción
 (`SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `DATABASE_URL`), todas ya
 precompletadas en `render.yaml`.
+
+`DEBUG` vale `False` si no se define y, en ese caso, `SECRET_KEY` es obligatoria: en desarrollo
+local hay que poner `DEBUG=True` en `backend/.env`. Son opcionales `JWT_ACCESS_SEGUNDOS` (duración
+del token de acceso, 30 minutos por defecto; el frontend lo renueva solo), `THROTTLE_ANON`,
+`THROTTLE_USER` y `THROTTLE_AUTH` (límites de pedidos; login y registro admiten 10 por minuto) y
+`SECURE_SSL_REDIRECT`.
