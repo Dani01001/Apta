@@ -21,7 +21,7 @@ class RegistroTests(APITestCase):
         )
         self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
         self.assertIn("access", respuesta.data)
-        self.assertIn("refresh", respuesta.data)
+        self.assertIn("reservaya_refresh", respuesta.cookies)
         usuario = User.objects.get(username="nueva.usuaria")
         self.assertTrue(Perfil.objects.filter(usuario=usuario).exists())
 
@@ -114,3 +114,78 @@ class LimiteDeIntentosTests(APITestCase):
             self.client.post("/api/usuarios/login/", {"username": "demo", "password": "incorrecta"})
         respuesta = self.client.post("/api/usuarios/login/", {"username": "demo", "password": "Demo1234"})
         self.assertEqual(respuesta.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+
+
+class CookieRefrescoTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+        self.usuario = User.objects.create_user(username="demo", password="Demo1234")
+        Perfil.objects.create(usuario=self.usuario, telefono="+595 981 111 222")
+
+    def tearDown(self):
+        cache.clear()
+
+    def _login(self):
+        return self.client.post("/api/usuarios/login/", {"username": "demo", "password": "Demo1234"})
+
+    def test_login_pone_el_refresco_en_cookie_httponly_y_no_en_el_cuerpo(self):
+        respuesta = self._login()
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
+        self.assertNotIn("refresh", respuesta.data)
+        cookie = respuesta.cookies["reservaya_refresh"]
+        self.assertTrue(cookie["httponly"])
+        self.assertEqual(cookie["path"], "/api/usuarios/")
+        self.assertEqual(cookie["samesite"], "Lax")
+
+    def test_registro_pone_el_refresco_en_cookie(self):
+        respuesta = self.client.post(
+            "/api/usuarios/registro/",
+            {
+                "username": "otra.persona",
+                "email": "otra@example.com",
+                "first_name": "Otra",
+                "last_name": "Persona",
+                "password": "ContraseñaSegura123",
+            },
+        )
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
+        self.assertNotIn("refresh", respuesta.data)
+        self.assertIn("reservaya_refresh", respuesta.cookies)
+
+    def test_renovar_con_cookie_devuelve_access_y_usuario_y_rota_la_cookie(self):
+        anterior = self._login().cookies["reservaya_refresh"].value
+        respuesta = self.client.post("/api/usuarios/token/refresh/")
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
+        self.assertIn("access", respuesta.data)
+        self.assertEqual(respuesta.data["usuario"]["username"], "demo")
+        self.assertNotEqual(respuesta.cookies["reservaya_refresh"].value, anterior)
+
+    def test_el_refresco_rotado_no_se_puede_reusar(self):
+        anterior = self._login().cookies["reservaya_refresh"].value
+        self.client.post("/api/usuarios/token/refresh/")
+        self.client.cookies["reservaya_refresh"] = anterior
+        respuesta = self.client.post("/api/usuarios/token/refresh/")
+        self.assertEqual(respuesta.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_renovar_sin_cookie_responde_401(self):
+        respuesta = self.client.post("/api/usuarios/token/refresh/")
+        self.assertEqual(respuesta.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_renovar_rechaza_un_origen_ajeno(self):
+        self._login()
+        respuesta = self.client.post("/api/usuarios/token/refresh/", HTTP_ORIGIN="https://sitio-malicioso.example")
+        self.assertEqual(respuesta.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_renovar_acepta_el_origen_del_frontend(self):
+        self._login()
+        respuesta = self.client.post("/api/usuarios/token/refresh/", HTTP_ORIGIN="http://localhost:3000")
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
+
+    def test_logout_invalida_el_refresco_y_borra_la_cookie(self):
+        refresco = self._login().cookies["reservaya_refresh"].value
+        respuesta = self.client.post("/api/usuarios/logout/")
+        self.assertEqual(respuesta.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(respuesta.cookies["reservaya_refresh"].value, "")
+        self.client.cookies["reservaya_refresh"] = refresco
+        respuesta = self.client.post("/api/usuarios/token/refresh/")
+        self.assertEqual(respuesta.status_code, status.HTTP_401_UNAUTHORIZED)
