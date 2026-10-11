@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Modal } from "@/components/Modal";
-import { ApiError, apiFetch, extraerMensajeError } from "@/lib/api";
+import { ApiError, extraerMensajeError } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { useAuthModal } from "@/lib/auth-modal-context";
 import type { Reserva } from "@/types";
@@ -43,7 +43,7 @@ export function ReservationForm({
   horaApertura: string;
   horaCierre: string;
 }) {
-  const { usuario, access, logout } = useAuth();
+  const { usuario, access, logout, fetchAutenticado } = useAuth();
   const { abrirLogin } = useAuthModal();
   const horarios = horariosDisponibles(horaApertura, horaCierre);
   const horaPorDefecto = horarios.includes("20:00")
@@ -78,9 +78,8 @@ export function ReservationForm({
     setError(null);
     setEnviando(true);
     try {
-      const reserva = await apiFetch<Reserva>("/reservas/", {
+      const reserva = await fetchAutenticado<Reserva>("/reservas/", {
         method: "POST",
-        token: access,
         body: JSON.stringify({
           restaurante: restauranteId,
           fecha,

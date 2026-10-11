@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { Modal } from "@/components/Modal";
-import { ApiError, apiFetch } from "@/lib/api";
+import { ApiError } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { useAuthModal } from "@/lib/auth-modal-context";
 import type { Paginado, Reserva } from "@/types";
@@ -19,7 +19,7 @@ const ESTILOS_ESTADO: Record<string, string> = {
 };
 
 export function MisReservasView() {
-  const { usuario, access, logout, cargando: cargandoAuth } = useAuth();
+  const { usuario, access, logout, cargando: cargandoAuth, fetchAutenticado } = useAuth();
   const { abrirLogin } = useAuthModal();
   const [reservas, setReservas] = useState<Reserva[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +29,7 @@ export function MisReservasView() {
   const cargarReservas = useCallback(async () => {
     if (!access) return;
     try {
-      const data = await apiFetch<Paginado<Reserva>>("/reservas/", { token: access });
+      const data = await fetchAutenticado<Paginado<Reserva>>("/reservas/");
       setReservas(data.results);
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
@@ -40,7 +40,7 @@ export function MisReservasView() {
         setError("No se pudieron cargar tus reservas.");
       }
     }
-  }, [access, logout, abrirLogin]);
+  }, [access, logout, abrirLogin, fetchAutenticado]);
 
   useEffect(() => {
     if (cargandoAuth || !usuario) return;
@@ -54,9 +54,8 @@ export function MisReservasView() {
     const id = reservaAConfirmar.id;
     setCancelando(id);
     try {
-      await apiFetch(`/reservas/${id}/cancelar/`, {
+      await fetchAutenticado(`/reservas/${id}/cancelar/`, {
         method: "PATCH",
-        token: access,
         body: JSON.stringify({}),
       });
       setReservas((prev) =>
