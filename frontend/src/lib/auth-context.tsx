@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -28,6 +29,7 @@ interface AuthContextValue {
   login: (username: string, password: string) => Promise<void>;
   registrar: (datos: RegistroInput) => Promise<void>;
   logout: () => void;
+  fetchAutenticado: <T>(path: string, options?: RequestInit) => Promise<T>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -44,6 +46,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [access, setAccess] = useState<string | null>(null);
   const [cargando, setCargando] = useState(true);
+  const accessRef = useRef<string | null>(null);
+  const refreshRef = useRef<string | null>(null);
+  const renovando = useRef<Promise<string | null> | null>(null);
 
   useEffect(() => {
     try {
@@ -55,6 +60,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setUsuario(datos.usuario);
         setAccess(datos.access);
+        accessRef.current = datos.access;
+        refreshRef.current = datos.refresh;
       }
     } catch {
       // localStorage no disponible o corrupto: se ignora y se inicia sin sesión
@@ -66,6 +73,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const guardarSesion = useCallback((datos: RespuestaAuth) => {
     setUsuario(datos.usuario);
     setAccess(datos.access);
+    accessRef.current = datos.access;
+    refreshRef.current = datos.refresh;
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
@@ -105,6 +114,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     setUsuario(null);
     setAccess(null);
+    accessRef.current = null;
+    refreshRef.current = null;
     try {
       window.localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -112,9 +123,61 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+
+  const renovarAccess = useCallback(async (): Promise<string | null> => {
+    const refresh = refreshRef.current;
+    if (!refresh) return null;
+    try {
+      const datos = await apiFetch<{ access: string; refresh?: string }>("/usuarios/token/refresh/", {
+        method: "POST",
+        body: JSON.stringify({ refresh }),
+      });
+      accessRef.current = datos.access;
+      if (datos.refresh) refreshRef.current = datos.refresh;
+      setAccess(datos.access);
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const guardado: Almacenado = JSON.parse(raw);
+          window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+              ...guardado,
+              access: datos.access,
+              refresh: refreshRef.current ?? guardado.refresh,
+            } satisfies Almacenado)
+          );
+        }
+      } catch {
+        // Si no se puede guardar, la sesión renovada sigue en memoria
+      }
+      return datos.access;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const fetchAutenticado = useCallback(
+    async <T,>(path: string, options: RequestInit = {}): Promise<T> => {
+      try {
+        return await apiFetch<T>(path, { ...options, token: accessRef.current });
+      } catch (err) {
+        if (!(err instanceof ApiError) || err.status !== 401) throw err;
+        // Varias llamadas que vencen juntas comparten una sola renovación
+        renovando.current ??= renovarAccess().finally(() => {
+          renovando.current = null;
+        });
+        const nuevo = await renovando.current;
+        if (!nuevo) throw err;
+        return apiFetch<T>(path, { ...options, token: nuevo });
+      }
+    },
+    [renovarAccess]
+  );
+
   const value = useMemo(
-    () => ({ usuario, access, cargando, login, registrar, logout }),
-    [usuario, access, cargando, login, registrar, logout]
+    () => ({ usuario, access, cargando, login, registrar, logout, fetchAutenticado }),
+    [usuario, access, cargando, login, registrar, logout, fetchAutenticado]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
