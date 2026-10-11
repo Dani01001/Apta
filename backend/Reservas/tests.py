@@ -1,4 +1,5 @@
 from datetime import timedelta
+from unittest import mock
 
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -129,3 +130,47 @@ class CancelarReservaTests(ReservaApiTestCase):
         self.client.force_authenticate(self.otro_usuario)
         respuesta = self.client.patch(f"/api/reservas/{self.reserva.id}/cancelar/")
         self.assertEqual(respuesta.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ReglasDeNegocioTests(ReservaApiTestCase):
+    def test_rechaza_reserva_duplicada_activa(self):
+        self.client.force_authenticate(self.usuario)
+        self.client.post("/api/reservas/", self._payload())
+        respuesta = self.client.post("/api/reservas/", self._payload())
+        self.assertEqual(respuesta.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("hora", respuesta.data)
+        self.assertEqual(Reserva.objects.count(), 1)
+
+    def test_permite_repetir_si_la_anterior_esta_cancelada(self):
+        self.client.force_authenticate(self.usuario)
+        creada = self.client.post("/api/reservas/", self._payload())
+        self.client.patch(f"/api/reservas/{creada.data['id']}/cancelar/")
+        respuesta = self.client.post("/api/reservas/", self._payload())
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
+
+    def test_rechaza_hora_ya_pasada_en_el_dia_de_hoy(self):
+        self.client.force_authenticate(self.usuario)
+        hoy = timezone.localdate()
+        ahora_simulada = timezone.make_aware(
+            timezone.datetime.combine(hoy, timezone.datetime.strptime("21:00", "%H:%M").time())
+        )
+        with mock.patch("Reservas.serializers.timezone.localtime", return_value=ahora_simulada):
+            respuesta = self.client.post("/api/reservas/", self._payload(fecha=str(hoy), hora="13:00"))
+        self.assertEqual(respuesta.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("hora", respuesta.data)
+
+    def test_no_modifica_ni_borra_reservas_finalizadas(self):
+        reserva = Reserva.objects.create(
+            usuario=self.usuario,
+            restaurante=self.restaurante,
+            fecha=self.manana,
+            hora="20:00",
+            numero_personas=2,
+            estado=Reserva.Estado.COMPLETADA,
+        )
+        self.client.force_authenticate(self.usuario)
+        cambio = self.client.patch(f"/api/reservas/{reserva.id}/", {"numero_personas": 3})
+        borrado = self.client.delete(f"/api/reservas/{reserva.id}/")
+        self.assertEqual(cambio.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(borrado.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertTrue(Reserva.objects.filter(pk=reserva.pk).exists())

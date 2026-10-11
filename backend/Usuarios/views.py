@@ -8,6 +8,7 @@ from .serializers import RegistroSerializer, UsuarioSerializer
 class RegistroView(generics.CreateAPIView):
     serializer_class = RegistroSerializer
     permission_classes = [permissions.AllowAny]
+    throttle_scope = "auth"
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
