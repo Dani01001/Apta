@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -98,3 +99,18 @@ class PerfilActualTests(APITestCase):
         self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
         self.usuario.refresh_from_db()
         self.assertEqual(self.usuario.perfil.telefono, "+595 981 999 999")
+
+
+class LimiteDeIntentosTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+        User.objects.create_user(username="demo", password="Demo1234")
+
+    def tearDown(self):
+        cache.clear()
+
+    def test_bloquea_el_login_despues_de_muchos_intentos(self):
+        for _ in range(10):
+            self.client.post("/api/usuarios/login/", {"username": "demo", "password": "incorrecta"})
+        respuesta = self.client.post("/api/usuarios/login/", {"username": "demo", "password": "Demo1234"})
+        self.assertEqual(respuesta.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
