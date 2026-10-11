@@ -21,7 +21,20 @@ const csp = [
   "object-src 'none'",
 ].join("; ");
 
+const apiUrl = (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/$/, "");
+
 const nextConfig: NextConfig = {
+  // Django exige la barra final en sus rutas; sin esto Next la quita con una redirección
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    // Proxy de las rutas de sesión: la cookie de refresco queda en el dominio del sitio
+    return [
+      {
+        source: "/api/usuarios/:path*",
+        destination: `${apiUrl}/usuarios/:path*/`,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

@@ -1,5 +1,9 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 
+// Las rutas de sesión van por el mismo dominio del sitio (proxy de next.config) para que la
+// cookie HttpOnly del token de refresco sea propia del sitio y no una cookie de terceros
+export const AUTH_URL = "/api";
+
 export class ApiError extends Error {
   status: number;
   detail: unknown;
@@ -13,10 +17,11 @@ export class ApiError extends Error {
 
 interface RequestOptions extends RequestInit {
   token?: string | null;
+  base?: string;
 }
 
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { token, headers, ...rest } = options;
+  const { token, headers, base = API_URL, ...rest } = options;
 
   const finalHeaders: Record<string, string> = {
     "Content-Type": "application/json",
@@ -26,7 +31,7 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
     finalHeaders.Authorization = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(`${base}${path}`, {
     ...rest,
     headers: finalHeaders,
   });

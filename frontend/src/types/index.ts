@@ -56,6 +56,5 @@ export interface Usuario {
 
 export interface RespuestaAuth {
   access: string;
-  refresh: string;
   usuario: Usuario;
 }

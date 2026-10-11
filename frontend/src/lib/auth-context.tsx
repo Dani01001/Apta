@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 
-import { apiFetch, ApiError } from "@/lib/api";
+import { apiFetch, ApiError, AUTH_URL } from "@/lib/api";
 import type { RespuestaAuth, Usuario } from "@/types";
 
 interface RegistroInput {
@@ -34,65 +34,65 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "reservaya.auth";
-
-interface Almacenado {
-  access: string;
-  refresh: string;
-  usuario: Usuario;
-}
+// Clave de la versión anterior, que guardaba los tokens en localStorage; se borra al cargar
+const STORAGE_KEY_ANTERIOR = "reservaya.auth";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [access, setAccess] = useState<string | null>(null);
   const [cargando, setCargando] = useState(true);
+  // El token de acceso vive solo en memoria; el de refresco, en una cookie HttpOnly
   const accessRef = useRef<string | null>(null);
-  const refreshRef = useRef<string | null>(null);
   const renovando = useRef<Promise<string | null> | null>(null);
-
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const datos: Almacenado = JSON.parse(raw);
-        // Hidratación única de la sesión guardada en localStorage al montar: no hay
-        // "external system" al que suscribirse, es una lectura de una sola vez.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setUsuario(datos.usuario);
-        setAccess(datos.access);
-        accessRef.current = datos.access;
-        refreshRef.current = datos.refresh;
-      }
-    } catch {
-      // localStorage no disponible o corrupto: se ignora y se inicia sin sesión
-    } finally {
-      setCargando(false);
-    }
-  }, []);
 
   const guardarSesion = useCallback((datos: RespuestaAuth) => {
     setUsuario(datos.usuario);
     setAccess(datos.access);
     accessRef.current = datos.access;
-    refreshRef.current = datos.refresh;
-    try {
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          access: datos.access,
-          refresh: datos.refresh,
-          usuario: datos.usuario,
-        } satisfies Almacenado)
-      );
-    } catch {
-      // Guardado best-effort; la sesión sigue viva en memoria aunque falle
-    }
   }, []);
+
+  const limpiarSesion = useCallback(() => {
+    setUsuario(null);
+    setAccess(null);
+    accessRef.current = null;
+  }, []);
+
+  const renovarAccess = useCallback(async (): Promise<string | null> => {
+    try {
+      const datos = await apiFetch<RespuestaAuth>("/usuarios/token/refresh/", {
+        method: "POST",
+        base: AUTH_URL,
+      });
+      guardarSesion(datos);
+      return datos.access;
+    } catch {
+      return null;
+    }
+  }, [guardarSesion]);
+
+  const renovarUnaVez = useCallback(() => {
+    // Varias llamadas que vencen juntas comparten una sola renovación
+    renovando.current ??= renovarAccess().finally(() => {
+      renovando.current = null;
+    });
+    return renovando.current;
+  }, [renovarAccess]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.removeItem(STORAGE_KEY_ANTERIOR);
+    } catch {
+      // localStorage no disponible: no hay nada viejo que borrar
+    }
+    // Recupera la sesión desde la cookie de refresco al cargar la página
+    renovarUnaVez().finally(() => setCargando(false));
+  }, [renovarUnaVez]);
 
   const login = useCallback(
     async (username: string, password: string) => {
       const datos = await apiFetch<RespuestaAuth>("/usuarios/login/", {
         method: "POST",
+        base: AUTH_URL,
         body: JSON.stringify({ username, password }),
       });
       guardarSesion(datos);
@@ -104,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (input: RegistroInput) => {
       const datos = await apiFetch<RespuestaAuth>("/usuarios/registro/", {
         method: "POST",
+        base: AUTH_URL,
         body: JSON.stringify(input),
       });
       guardarSesion(datos);
@@ -112,50 +113,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const logout = useCallback(() => {
-    setUsuario(null);
-    setAccess(null);
-    accessRef.current = null;
-    refreshRef.current = null;
-    try {
-      window.localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // nada que limpiar si localStorage no está disponible
-    }
-  }, []);
-
-
-  const renovarAccess = useCallback(async (): Promise<string | null> => {
-    const refresh = refreshRef.current;
-    if (!refresh) return null;
-    try {
-      const datos = await apiFetch<{ access: string; refresh?: string }>("/usuarios/token/refresh/", {
-        method: "POST",
-        body: JSON.stringify({ refresh }),
-      });
-      accessRef.current = datos.access;
-      if (datos.refresh) refreshRef.current = datos.refresh;
-      setAccess(datos.access);
-      try {
-        const raw = window.localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const guardado: Almacenado = JSON.parse(raw);
-          window.localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify({
-              ...guardado,
-              access: datos.access,
-              refresh: refreshRef.current ?? guardado.refresh,
-            } satisfies Almacenado)
-          );
-        }
-      } catch {
-        // Si no se puede guardar, la sesión renovada sigue en memoria
-      }
-      return datos.access;
-    } catch {
-      return null;
-    }
-  }, []);
+    limpiarSesion();
+    // Invalida el refresco en el servidor y borra la cookie; si falla, la cookie vence sola
+    apiFetch<void>("/usuarios/logout/", { method: "POST", base: AUTH_URL }).catch(() => {});
+  }, [limpiarSesion]);
 
   const fetchAutenticado = useCallback(
     async <T,>(path: string, options: RequestInit = {}): Promise<T> => {
@@ -163,16 +124,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return await apiFetch<T>(path, { ...options, token: accessRef.current });
       } catch (err) {
         if (!(err instanceof ApiError) || err.status !== 401) throw err;
-        // Varias llamadas que vencen juntas comparten una sola renovación
-        renovando.current ??= renovarAccess().finally(() => {
-          renovando.current = null;
-        });
-        const nuevo = await renovando.current;
+        const nuevo = await renovarUnaVez();
         if (!nuevo) throw err;
         return apiFetch<T>(path, { ...options, token: nuevo });
       }
     },
-    [renovarAccess]
+    [renovarUnaVez]
   );
 
   const value = useMemo(
