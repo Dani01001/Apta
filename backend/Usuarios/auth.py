@@ -16,4 +16,5 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 
 class LoginView(TokenObtainPairView):
+    throttle_scope = "auth"
     serializer_class = LoginSerializer

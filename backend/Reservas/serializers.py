@@ -57,6 +57,27 @@ class ReservaSerializer(serializers.ModelSerializer):
                     }
                 )
 
+        fecha = attrs.get("fecha") or getattr(self.instance, "fecha", None)
+        if fecha == timezone.localdate() and hora is not None and hora <= timezone.localtime().time():
+            raise serializers.ValidationError(
+                {"hora": "La hora de la reserva ya pasó; elige un horario posterior."}
+            )
+
+        request = self.context.get("request")
+        if restaurante and fecha and hora is not None and request and request.user.is_authenticated:
+            repetidas = Reserva.objects.filter(
+                usuario=request.user,
+                restaurante=restaurante,
+                fecha=fecha,
+                hora=hora,
+            ).exclude(estado__in=(Reserva.Estado.CANCELADA, Reserva.Estado.COMPLETADA))
+            if self.instance is not None:
+                repetidas = repetidas.exclude(pk=self.instance.pk)
+            if repetidas.exists():
+                raise serializers.ValidationError(
+                    {"hora": "Ya tienes una reserva activa en este restaurante para ese día y hora."}
+                )
+
         if restaurante and numero_personas and numero_personas > restaurante.capacidad:
             raise serializers.ValidationError(
                 {
