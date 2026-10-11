@@ -214,3 +214,12 @@ out/
 
 # Backend static
 staticfiles/
+
+# Archivos de IA y notas locales
+.claude/
+CLAUDE.md
+.claudeignore
+.gemini/
+GEMINI.md
+notas/
+borradores/
