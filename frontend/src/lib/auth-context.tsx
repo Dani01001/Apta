@@ -36,6 +36,26 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 // Clave de la versión anterior, que guardaba los tokens en localStorage; se borra al cargar
 const STORAGE_KEY_ANTERIOR = "reservaya.auth";
+// Marca sin datos sensibles: indica que hay una cookie de sesión que vale la pena renovar al
+// cargar. Sin ella, una visita sin sesión no dispara un 401 en la consola.
+const MARCA_SESION = "reservaya.sesion";
+
+function marcarSesion(activa: boolean) {
+  try {
+    if (activa) window.localStorage.setItem(MARCA_SESION, "1");
+    else window.localStorage.removeItem(MARCA_SESION);
+  } catch {
+    // localStorage no disponible: se renueva siempre al cargar
+  }
+}
+
+function haySesionMarcada() {
+  try {
+    return window.localStorage.getItem(MARCA_SESION) === "1";
+  } catch {
+    return true;
+  }
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
@@ -49,12 +69,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUsuario(datos.usuario);
     setAccess(datos.access);
     accessRef.current = datos.access;
+    marcarSesion(true);
   }, []);
 
   const limpiarSesion = useCallback(() => {
     setUsuario(null);
     setAccess(null);
     accessRef.current = null;
+    marcarSesion(false);
   }, []);
 
   const renovarAccess = useCallback(async (): Promise<string | null> => {
@@ -66,6 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       guardarSesion(datos);
       return datos.access;
     } catch {
+      marcarSesion(false);
       return null;
     }
   }, [guardarSesion]);
@@ -83,6 +106,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       window.localStorage.removeItem(STORAGE_KEY_ANTERIOR);
     } catch {
       // localStorage no disponible: no hay nada viejo que borrar
+    }
+    if (!haySesionMarcada()) {
+      // Lectura única al montar: no hay sesión que recuperar
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCargando(false);
+      return;
     }
     // Recupera la sesión desde la cookie de refresco al cargar la página
     renovarUnaVez().finally(() => setCargando(false));
