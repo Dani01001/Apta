@@ -42,8 +42,10 @@ La API queda disponible en `http://127.0.0.1:8000/api/`.
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| POST | `/api/usuarios/registro/` | Crea una cuenta y devuelve tokens JWT |
-| POST | `/api/usuarios/login/` | Login, devuelve `access`/`refresh` y datos del usuario |
+| POST | `/api/usuarios/registro/` | Crea una cuenta, devuelve `access` y deja el refresco en una cookie HttpOnly |
+| POST | `/api/usuarios/login/` | Login, devuelve `access` y datos del usuario; el refresco va en una cookie HttpOnly |
+| POST | `/api/usuarios/token/refresh/` | Renueva `access` con la cookie de refresco y la rota |
+| POST | `/api/usuarios/logout/` | Invalida el refresco y borra la cookie |
 | GET/PATCH | `/api/usuarios/me/` | Perfil del usuario autenticado |
 | GET | `/api/restaurantes/` | Lista restaurantes (filtros: `categoria`, `ciudad`, `rango_precio`, `search`) |
 | GET | `/api/restaurantes/<slug>/` | Detalle de un restaurante |
@@ -121,5 +123,10 @@ precompletadas en `render.yaml`.
 `DEBUG` vale `False` si no se define y, en ese caso, `SECRET_KEY` es obligatoria: en desarrollo
 local hay que poner `DEBUG=True` en `backend/.env`. Son opcionales `JWT_ACCESS_SEGUNDOS` (duración
 del token de acceso, 30 minutos por defecto; el frontend lo renueva solo), `THROTTLE_ANON`,
-`THROTTLE_USER` y `THROTTLE_AUTH` (límites de pedidos; login y registro admiten 10 por minuto) y
-`SECURE_SSL_REDIRECT`.
+`THROTTLE_USER` y `THROTTLE_AUTH` (límites de pedidos; login y registro admiten 10 por minuto),
+`SECURE_SSL_REDIRECT` y `REFRESH_COOKIE_SAMESITE` (`Lax` por defecto).
+
+Sesión: el token de acceso vive solo en memoria del navegador y el de refresco en la cookie HttpOnly
+`reservaya_refresh`. El frontend llama a las rutas `/api/usuarios/*` por su propio dominio: Next las
+reenvía al backend (`rewrites` en `next.config.ts`, a partir de `NEXT_PUBLIC_API_URL`), así la cookie es
+del sitio y no la bloquean los navegadores que rechazan cookies de terceros.
