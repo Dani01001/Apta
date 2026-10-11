@@ -26,8 +26,10 @@ export function MisReservasView() {
   const [cancelando, setCancelando] = useState<number | null>(null);
   const [reservaAConfirmar, setReservaAConfirmar] = useState<Reserva | null>(null);
 
+  const haySesion = Boolean(access);
+
   const cargarReservas = useCallback(async () => {
-    if (!access) return;
+    if (!haySesion) return;
     try {
       const data = await fetchAutenticado<Paginado<Reserva>>("/reservas/");
       setReservas(data.results);
@@ -40,7 +42,7 @@ export function MisReservasView() {
         setError("No se pudieron cargar tus reservas.");
       }
     }
-  }, [access, logout, abrirLogin, fetchAutenticado]);
+  }, [haySesion, logout, abrirLogin, fetchAutenticado]);
 
   useEffect(() => {
     if (cargandoAuth || !usuario) return;
