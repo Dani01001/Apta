@@ -175,6 +175,12 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 
+# Cookie HttpOnly del token de refresco. "Lax" sirve cuando el frontend llama a la API por el
+# mismo dominio (proxy de Next); "None" solo si el frontend llama directo a otro dominio.
+REFRESH_COOKIE_SAMESITE = config("REFRESH_COOKIE_SAMESITE", default="Lax")
+if REFRESH_COOKIE_SAMESITE not in ("Lax", "Strict", "None"):
+    raise ValueError("REFRESH_COOKIE_SAMESITE debe ser Lax, Strict o None")
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
